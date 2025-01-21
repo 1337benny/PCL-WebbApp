@@ -6,6 +6,7 @@ namespace PCLwebb.Models
     {
         [Required(ErrorMessage = "Vänligen skriv en epost.")]
         [StringLength(255)]
+        [RegularExpression("^([\\w\\.\\-]+)@([\\w\\-]+)((\\.(\\w){2,3})+)$", ErrorMessage = "Vänligen ange en giltig epost.")]
         public string Email { get; set; }
 
         [Required(ErrorMessage = "Vänligen skriv lösenord.")]
@@ -28,6 +29,7 @@ namespace PCLwebb.Models
         public string Lastname { get; set; }
 
         [Required(ErrorMessage = "Vänligen fyll i ditt födelsedatum.")]
+        //[RegularExpression("^\\d{4}-\\d{2}-\\d{2}$\r\n", ErrorMessage = "Vänligen fyll i ditt födelsedatum.")]
         public DateOnly BirthDay { get; set; }
     }
 }

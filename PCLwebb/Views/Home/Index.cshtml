@@ -1,8 +1,17 @@
-﻿@{
+﻿@model User
+@{
     ViewData["Title"] = "Startsida";
 }
 
+@if (Model == null){
+    <h1>Ingen användare hittades</h1>
+}
+else{
+
+
+
 <div class="text-center">
-    <h1 class="display-4">Välkommen</h1>
+    <h1 class="display-4">Välkommen @Model.Firstname</h1>
     <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>
+}

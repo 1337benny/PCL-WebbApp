@@ -7,15 +7,24 @@ namespace PCLwebb.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private ModelContext context;
+        
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, ModelContext context)
         {
             _logger = logger;
+            this.context = context;
+
         }
 
         public IActionResult Index()
         {
-            return View();
+            IQueryable<User> userList = from user in context.Users select user;
+            userList = userList.Where(user => user.UserName == User.Identity.Name);
+            User theUser = userList.FirstOrDefault();
+            
+
+            return View(theUser);
         }
 
         public IActionResult Privacy()

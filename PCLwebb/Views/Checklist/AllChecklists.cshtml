@@ -1,0 +1,40 @@
+﻿@model List<Checklist>
+
+<a asp-action="AddChecklist"><button class="btn btn-outline-success">+ Skapa ny checklista</button></a>
+
+@if (Model.FirstOrDefault() == null){
+    <p>Du har inte skapat någon checklista ännu</p>
+}
+else{
+    <table class="table">
+        <thead>
+            <td>Namn</td>
+            <td>Beskrivning</td>
+            <td>Antal uppgifter</td>
+        </thead>
+        
+            @foreach(Checklist checklist in Model){
+            <tbody>
+                <td>@checklist.Name</td>
+                <td>@checklist.Description</td>
+                <td>
+                    @{
+                        int numberOfTasks = 0;
+                    }
+                    @foreach (ListTask task in checklist.ListTasks){
+                        numberOfTasks++;
+                    }
+                    @numberOfTasks.ToString()
+                <a asp-action="EditChecklist"><button class="btn btn-primary" style="float: right;">Redigera</button></a>
+                
+                </td>
+            
+                
+                
+            </tbody>
+            }
+
+        
+    </table>
+	}
+

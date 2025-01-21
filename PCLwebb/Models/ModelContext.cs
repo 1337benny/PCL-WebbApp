@@ -63,6 +63,12 @@ namespace PCLwebb.Models
                 .HasForeignKey(lt => lt.ChecklistID)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            modelBuilder.Entity<Checklist>()
+               .HasOne(cl => cl.Creator)
+               .WithMany(u => u.Checklists)
+               .HasForeignKey(cl => cl.CreatorID)
+               .OnDelete(DeleteBehavior.NoAction);
+
         }
     }
 }

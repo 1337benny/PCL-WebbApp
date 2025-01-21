@@ -1,0 +1,83 @@
+﻿@model Checklist
+<h1>Skapa ny checklista</h1>
+
+@if (Model.Name == null){
+
+
+<form asp-action="AddChecklist" method="post">
+    <label style="margin-top: 15px;">Titel: </label>
+    <input id="addChecklistName" asp-for="Name" />
+    <br />
+    <label style="margin-top: 15px;">Beskrivning: </label>
+    <input id="addChecklistDescription" asp-for="Description" />
+    <br />
+
+        <button class="btn btn-primary" style="margin-top: 15px;" id="addChecklistButton" type="submit" disabled>Fortsätt</button>
+</form>
+
+
+<script>
+    // script som kontrollerar att alla inputs är ifyllda
+       const titleInput = document.getElementById("addChecklistName");
+       const descriptionInput = document.getElementById("addChecklistDescription");
+       const addButton = document.getElementById("addChecklistButton");
+
+       function validateForm() {
+           const title = titleInput.value.trim();
+           const description = descriptionInput.value.trim();
+
+
+           const isTitleValid = title !== "";
+           const isDescriptionValid = description !== "";
+
+
+           addButton.disabled = !(isTitleValid && isDescriptionValid);
+       }
+
+       titleInput.addEventListener("input", validateForm);
+       descriptionInput.addEventListener("input", validateForm);
+
+</script>
+}
+else{
+    
+    @* <h4 class="ms-3 mx-3">Checklista: @Model.Name</h4>
+    <table class="table">
+        <thead>
+        <td>Uppgift</td>
+        <td>Beskrivning</td>
+        <td>Status</td>
+        </thead>
+        <tbody>
+            @foreach (ListTask task in Model.ListTasks)
+            {
+            <td>@task.Name</td>
+            <td>@task.Description</td>
+            <td>
+              @if (task.IsCompleted){
+                  <span>Klar</span>
+              }
+              else{
+                    <span>Ej klar</span>
+              }
+            </td>
+            }
+
+        </tbody>
+    </table>
+
+    <form asp-controller="ListTask" asp-action="AddListTask" method="post">
+        <label style="margin-top: 15px;">Uppgiftens titel: </label>
+        <input name="taskName" />
+        <br />
+        <label style="margin-top: 15px;">Beskrivning: </label>
+        <input name="taskDescription" />
+        <br />
+        <input type="hidden" name="checklistId" value="@Model.Id" />
+        <button class="btn btn-primary" style="margin-top: 15px;" type="submit">Lägg till uppgift</button>
+    </form> *@
+
+}
+
+       
+       

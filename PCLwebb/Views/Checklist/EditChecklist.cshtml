@@ -1,0 +1,63 @@
+﻿@model Checklist
+
+<h4 class="text-center">Redigera checklista</h4>
+
+<div class="row gx-3">
+    <div class="col-md-6">
+        <div class="border shadow my-3 p-2">
+            <h5>Ändra namn/beskrivning</h5>
+            <form asp-action="UpdateChecklistBasic" method="post">
+                <label style="margin-top: 15px;">Titel: </label>
+                <input class="w-75" asp-for="Name" />
+                <br />
+                <label style="margin-top: 15px;">Beskrivning: </label>
+                <textarea asp-for="Description" rows="4" class="form-control"></textarea>
+                <br />
+                <button class="btn btn-outline-primary" style="margin-top: 15px;" type="submit">Uppdatera</button>
+            </form>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="border shadow my-3 p-2">
+            <h5>Lägg till en uppgift</h5>
+            <form asp-controller="ListTask" asp-action="AddListTask" method="post">
+                <label style="margin-top: 15px;">Uppgiftens titel: </label>
+                <input class="w-75" name="taskName" />
+                <br />
+                <label style="margin-top: 15px;">Beskrivning: </label>
+                <textarea name="taskDescription" rows="4" class="form-control"></textarea>
+                <br />
+                <input type="hidden" name="checklistId" value="@Model.Id" />
+                <button class="btn btn-outline-primary" style="margin-top: 15px;" type="submit">Lägg till</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<table class="table">
+    <thead>
+    <td>Uppgift</td>
+    <td>Beskrivning</td>
+    <td>Status</td>
+    </thead>
+    <tbody>
+        @foreach (ListTask task in Model.ListTasks)
+        {
+        <td>@task.Name</td>
+        <td>@task.Description</td>
+        <td>
+                @if (task.IsCompleted)
+                {
+                <span>Klar</span>
+                }
+                else
+                {
+                <span>Ej klar</span>
+                }
+        </td>
+        }
+
+    </tbody>
+</table>
+
+

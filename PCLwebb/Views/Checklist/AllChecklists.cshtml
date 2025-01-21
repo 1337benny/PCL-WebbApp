@@ -1,16 +1,17 @@
 ﻿@model List<Checklist>
 
+    <h4 class="text-center my-5">Mina checklistor</h4>
 <a asp-action="AddChecklist"><button class="btn btn-outline-success">+ Skapa ny checklista</button></a>
 
 @if (Model.FirstOrDefault() == null){
-    <p>Du har inte skapat någon checklista ännu</p>
+    <p class="mt-5">Du har inte skapat någon checklista ännu.</p>
 }
 else{
-    <table class="table">
+    <table class="table mt-5">
         <thead>
-            <td>Namn</td>
-            <td>Beskrivning</td>
-            <td>Antal uppgifter</td>
+            <td class="fw-bold">Checklista</td>
+            <td class="fw-bold">Beskrivning</td>
+            <td class="fw-bold">Antal uppgifter</td>
         </thead>
         
             @foreach(Checklist checklist in Model){
@@ -25,7 +26,7 @@ else{
                         numberOfTasks++;
                     }
                     @numberOfTasks.ToString()
-                <a asp-action="EditChecklist"><button class="btn btn-primary" style="float: right;">Redigera</button></a>
+                <a asp-action="EditChecklist" asp-route-checklistID="@checklist.Id"><button class="btn btn-primary" style="float: right;">Redigera</button></a>
                 
                 </td>
             

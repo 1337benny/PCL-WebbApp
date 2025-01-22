@@ -62,5 +62,22 @@ namespace PCLwebb.Controllers
 
             return View(theClient);
         }
+
+        [HttpPost]
+        public ActionResult DeleteClient(int clientID)
+        {
+            if (!User.Identity.IsAuthenticated)
+            {
+                RedirectToAction("Index", "Home");
+            }
+
+            IQueryable<Client> clientList = from client in context.Clients select client;
+            clientList = clientList.Where(c => c.Id == clientID && c.Creator.UserName == User.Identity.Name);
+            Client theClient = clientList.FirstOrDefault();
+
+            context.Clients.Remove(theClient);
+            context.SaveChanges();
+            return RedirectToAction("AllClients");
+        }
     }
 }

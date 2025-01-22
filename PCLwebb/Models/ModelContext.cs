@@ -69,6 +69,13 @@ namespace PCLwebb.Models
                .HasForeignKey(cl => cl.CreatorID)
                .OnDelete(DeleteBehavior.NoAction);
 
+            modelBuilder.Entity<Project>()
+                .HasOne(p => p.Creator)
+                .WithMany(u => u.Projects) 
+                .HasForeignKey(p => p.CreatedBy)
+                .OnDelete(DeleteBehavior.Restrict);
+
+
         }
     }
 }

@@ -1,3 +1,107 @@
 ﻿@model Client 
 
-<h4>Kund: @Model.Name</h4>
+<!-- Modal -->
+<div class="modal fade" id="deleteChecklistModal" tabindex="-1" aria-labelledby="deleteChecklistModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteChecklistModalLabel">Bekräfta radering</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Är du säker på att du vill radera den här kunden? Projekten kommer att finnas kvar under dina projekt.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Avbryt</button>
+                <form id="deleteChecklistForm" asp-action="DeleteClient" method="post">
+                    <input type="hidden" id="checklistIDToDelete" name="clientID" value="@Model.Id" />
+                    <button type="submit" class="btn btn-danger">Radera</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="border shadow border-3 p-2 mb-5">
+<h4>@Model.Name</h4>
+<label>@Model.City</label>
+<br />
+<label>@Model.Email</label>
+</div>
+
+<div class="border shadow border-3 p-2 mb-5">
+	<h5>Kundens projekt</h5>
+	@if (Model.ClientHasProjects.FirstOrDefault() == null){
+		<label>Kunden är inte delaktig i något projekt.</label>
+	}
+	else{
+        <table class="table table-fixed mt-5">
+            <thead>
+            <td style="width: 20%;" class="fw-bold">Namn</td>
+            <td style="width: 35%;" class="fw-bold">Beskrivning</td>
+            <td style="width: 10%;" class="fw-bold">Startdatum</td>
+            <td style="width: 10%;" class="fw-bold">Slutdatum</td>
+            <td style="width: 10%;" class="fw-bold">Antal checklistor</td>
+            <td style="width: 15%;" class="fw-bold">Status</td>
+            </thead>
+
+            @foreach (Client_Has_Project chp in Model.ClientHasProjects)
+            {
+                <tbody>
+                <td>@chp.Project.Name</td>
+                <td>@chp.Project.Description</td>
+                <td>@chp.Project.StartDate</td>
+                <td>@chp.Project.EndDate</td>
+                <td>
+                        @{
+                            int numberOfChecklists = 0;
+                        }
+                        @foreach (Project_Has_Checklist phc in chp.Project.ProjectHasChecklists)
+                        {
+                            
+                                numberOfChecklists++;
+                            
+                        }
+                        @numberOfChecklists.ToString()
+                    
+
+                </td>
+                <td>
+                    @if (chp.Project.IsActive){
+                        <p>Aktiv</p>
+                    }
+                    else{
+                        <p>Inaktiv</p>
+                    }
+                </td>
+
+
+
+                </tbody>
+            }
+
+
+        </table>
+	}
+
+</div>
+
+
+<form id="deleteChecklistForm" style="display: none;" asp-action="DeleteClient" method="post">
+    <input type="hidden" name="clientID" value="@Model.Id" />
+</form>
+
+<button class="btn btn-danger mb-1 mt-5" type="button" data-bs-toggle="modal" data-bs-target="#deleteChecklistModal">
+    Radera kund
+</button>
+
+<script>
+    // Lägg till event listener för att hantera när användaren vill radera en checklista
+    const deleteButton = document.querySelector('[data-bs-toggle="modal"][data-bs-target="#deleteChecklistModal"]');
+    if (deleteButton) {
+        deleteButton.addEventListener("click", function() {
+            const checklistID = deleteButton.closest('form').querySelector('input[name="checklistID"]').value;
+            document.getElementById('checklistIDToDelete').value = checklistID;
+        });
+    }
+</script>

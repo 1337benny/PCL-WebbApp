@@ -28,5 +28,7 @@ namespace PCLwebb.Models
 
         public virtual ICollection<Checklist> Checklists { get; set; }
 
+        public virtual ICollection<Project> Projects { get; set; } = new List<Project>();
+
     }
 }

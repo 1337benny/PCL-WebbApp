@@ -1,4 +1,6 @@
-﻿namespace PCLwebb.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace PCLwebb.Models
 {
     public class Project
     {
@@ -9,6 +11,12 @@
         public DateOnly? StartDate { get; set; }
         public DateOnly? EndDate { get; set; }
         public bool IsActive { get; set; } = true;
+
+        public string CreatedBy { get; set; }
+
+        [ForeignKey(nameof(CreatedBy))]
+        public virtual User Creator { get; set; }
+
 
         public virtual IEnumerable<Client_Has_Project> ClientHasProjects { get; set; } = new List<Client_Has_Project>();
 

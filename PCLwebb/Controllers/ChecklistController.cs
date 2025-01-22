@@ -90,8 +90,24 @@ namespace PCLwebb.Controllers
                 context.SaveChanges();
             return RedirectToAction("EditChecklist", new { checklistID = checklistId });
 
+        }
 
+        [HttpPost]
+        public IActionResult DeleteChecklist(int checklistID)
+        {
+            if (!User.Identity.IsAuthenticated)
+            {
+                RedirectToAction("Index", "Home");
+            }
 
+            IQueryable<Checklist> checkLists = from check in context.Checklists select check;
+            checkLists = checkLists.Where(c => c.Id == checklistID && c.Creator.UserName == User.Identity.Name);
+            Checklist theChecklist = checkLists.FirstOrDefault();
+
+            context.Checklists.Remove(theChecklist);
+            context.SaveChanges();
+
+            return RedirectToAction("AllChecklists");
         }
 
     }

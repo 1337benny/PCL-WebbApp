@@ -71,5 +71,28 @@ namespace PCLwebb.Controllers
             return View(theChecklist);
         }
 
+        [HttpPost]
+        public IActionResult UpdateChecklistBasic(Checklist checklist, int checklistId)
+        {
+            if (!User.Identity.IsAuthenticated)
+            {
+                RedirectToAction("Index", "Home");
+            }
+            
+                IQueryable<Checklist> checkLists = from check in context.Checklists select check;
+                checkLists = checkLists.Where(c => c.Id == checklistId && c.Creator.UserName == User.Identity.Name);
+                Checklist theChecklist = checkLists.FirstOrDefault();
+
+                theChecklist.Name = checklist.Name;
+                theChecklist.Description = checklist.Description;
+
+                context.Checklists.Update(theChecklist);
+                context.SaveChanges();
+            return RedirectToAction("EditChecklist", new { checklistID = checklistId });
+
+
+
+        }
+
     }
 }

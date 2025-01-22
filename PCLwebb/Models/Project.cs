@@ -8,6 +8,7 @@
         public string? Description { get; set; }
         public DateOnly? StartDate { get; set; }
         public DateOnly? EndDate { get; set; }
+        public bool IsActive { get; set; } = true;
 
         public virtual IEnumerable<Client_Has_Project> ClientHasProjects { get; set; } = new List<Client_Has_Project>();
 

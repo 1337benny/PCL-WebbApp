@@ -1,0 +1,46 @@
+﻿
+<h4 class="text-center">Skapa ny kund</h4>
+
+
+
+
+    <form asp-action="AddClient" method="post">
+        <label style="margin-top: 15px;">Kundens namn: </label>
+        <input id="addClientName" name="clientName" />
+        <br />
+        <label style="margin-top: 15px;">Stad: </label>
+        <input id="addClientCity" name="clientCity" />
+        <br />
+        <label style="margin-top: 15px;">Epost: </label>
+        <input id="addClientEmail" name="clientEmail" />
+        <br />
+        
+        <button class="btn btn-primary" style="margin-top: 15px;" id="addClientButton" type="submit" disabled>Lägg till</button>
+    </form>
+
+
+    <script>
+        // script som kontrollerar att alla inputs är ifyllda
+       const nameInput = document.getElementById("addClientName");
+        const cityInput = document.getElementById("addClientCity");
+           const emailInput = document.getElementById("addClientEmail");
+           const addButton = document.getElementById("addClientButton");
+
+           function validateForm() {
+               const title = nameInput.value.trim();
+               const city = cityInput.value.trim();
+               const email = emailInput.value.trim();
+
+
+               const isTitleValid = title !== "";
+               const isCityValid = city !== "";
+               const isEmailValid = email !== "";
+
+               addButton.disabled = !(isTitleValid && isCityValid && isEmailValid);
+           }
+
+           nameInput.addEventListener("input", validateForm);
+           cityInput.addEventListener("input", validateForm);
+           emailInput.addEventListener("input", validateForm);
+
+    </script>

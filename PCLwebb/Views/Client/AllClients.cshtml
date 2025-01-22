@@ -1,0 +1,72 @@
+﻿@model List<Client>
+    <h4 class="text-center my-5">Mina kunder</h4>
+    <a asp-action="AddClient"><button class="btn btn-outline-success">+ Skapa ny kund</button></a>
+
+	@if (Model.FirstOrDefault() == null){
+		<p>Du har inte lagt till några kunder ännu.</p>
+	}
+	else{
+
+    <table class="table table-fixed mt-5">
+        <thead>
+        <td style="width: 35%;" class="fw-bold">Namn</td>
+        <td style="width: 25%;" class="fw-bold">Stad</td>
+        <td style="width: 25%;" class="fw-bold">Epost</td>
+        <td style="width: 15%;" class="fw-bold">Antal aktiva projekt</td>
+        </thead>
+
+        @foreach (Client client in Model)
+        {
+            <tbody>
+            <td>@client.Name</td>
+            <td>@client.City</td>
+            <td>@client.Email</td>
+            <td>
+                    @{
+                        int numberOfProjects = 0;
+                    }
+                    @foreach (Client_Has_Project chp in client.ClientHasProjects)
+                    {
+                        if (chp.Project.IsActive){
+                            numberOfProjects++;
+                        }
+                    }
+                    @numberOfProjects.ToString()
+                <a asp-action="ClientInfo" asp-route-clientID="@client.Id"><button class="btn btn-primary" style="float: right;">Visa</button></a>
+
+            </td>
+
+
+
+            </tbody>
+        }
+
+
+    </table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	}

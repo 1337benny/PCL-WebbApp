@@ -5,7 +5,8 @@
     <input id="addProjectName" name="projectName" />
     <br />
     <label style="margin-top: 15px;">Beskrivning: </label>
-    <input id="addProjectDescription" name="projectDescription" />
+    
+    <textarea name="projectDescription" id="addProjectDescription" rows="4" class="form-control"></textarea>
     <br />
     <label style="margin-top: 15px;">Startdatum: </label>
     <input id="addProjectStartdate" type="date" name="projectStartdate" />
@@ -14,7 +15,10 @@
     <input id="addProjectEnddate" type="date" name="projectEnddate" />
     <br />
     <label style="margin-top: 15px;">Status: </label>
-    <input id="addProjectStatus" type="date" name="projectStatus" />
+    <select name="projectStatus">
+        <option value="true">Aktivt</option>
+        <option value="false">Avslutat</option>
+    </select>
     <br />
 
     <button class="btn btn-primary" style="margin-top: 15px;" id="addProjectButton" type="submit" disabled>Lägg till</button>
@@ -22,27 +26,36 @@
 
 
 <script>
-     // script som kontrollerar att alla inputs är ifyllda
-    const nameInput = document.getElementById("addClientName");
-     const cityInput = document.getElementById("addClientCity");
-        const emailInput = document.getElementById("addClientEmail");
-        const addButton = document.getElementById("addClientButton");
+    // Hämta alla relevanta input-element
+    const nameInput = document.getElementById("addProjectName");
+    const descriptionInput = document.getElementById("addProjectDescription");
+    const startdateInput = document.getElementById("addProjectStartdate");
+    const enddateInput = document.getElementById("addProjectEnddate");
+    const addButton = document.getElementById("addProjectButton");
 
-        function validateForm() {
-            const title = nameInput.value.trim();
-            const city = cityInput.value.trim();
-            const email = emailInput.value.trim();
+    // Funktion som validerar att alla fält är ifyllda
+    function validateForm() {
+        const name = nameInput.value.trim();
+        const description = descriptionInput.value.trim();
+        const startdate = startdateInput.value.trim();
+        const enddate = enddateInput.value.trim();
 
+        const isNameValid = name !== "";
+        const isDescriptionValid = description !== "";
+        const isStartdateValid = startdate !== "";
+        const isEnddateValid = enddate !== "";
 
-            const isTitleValid = title !== "";
-            const isCityValid = city !== "";
-            const isEmailValid = email !== "";
+        // Aktivera eller inaktivera knappen baserat på valideringen
+        addButton.disabled = !(isNameValid && isDescriptionValid && isStartdateValid && isEnddateValid);
+    }
 
-            addButton.disabled = !(isTitleValid && isCityValid && isEmailValid);
-        }
+    // Lägg till event listeners för att lyssna på ändringar i varje input-fält
+    nameInput.addEventListener("input", validateForm);
+    descriptionInput.addEventListener("input", validateForm);
+    startdateInput.addEventListener("input", validateForm);
+    enddateInput.addEventListener("input", validateForm);
 
-        nameInput.addEventListener("input", validateForm);
-        cityInput.addEventListener("input", validateForm);
-        emailInput.addEventListener("input", validateForm);
-
+    // Kör validering en gång vid sidladdning för att säkerställa att knappen är korrekt inställd
+    document.addEventListener("DOMContentLoaded", validateForm);
 </script>
+

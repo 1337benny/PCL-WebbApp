@@ -1,0 +1,48 @@
+﻿<h4>Skapa ett nytt projekt</h4>
+
+<form asp-action="AddProject" method="post">
+    <label style="margin-top: 15px;">Projektets namn: </label>
+    <input id="addProjectName" name="projectName" />
+    <br />
+    <label style="margin-top: 15px;">Beskrivning: </label>
+    <input id="addProjectDescription" name="projectDescription" />
+    <br />
+    <label style="margin-top: 15px;">Startdatum: </label>
+    <input id="addProjectStartdate" type="date" name="projectStartdate" />
+    <br />
+    <label style="margin-top: 15px;">Slutdatum: </label>
+    <input id="addProjectEnddate" type="date" name="projectEnddate" />
+    <br />
+    <label style="margin-top: 15px;">Status: </label>
+    <input id="addProjectStatus" type="date" name="projectStatus" />
+    <br />
+
+    <button class="btn btn-primary" style="margin-top: 15px;" id="addProjectButton" type="submit" disabled>Lägg till</button>
+</form>
+
+
+<script>
+     // script som kontrollerar att alla inputs är ifyllda
+    const nameInput = document.getElementById("addClientName");
+     const cityInput = document.getElementById("addClientCity");
+        const emailInput = document.getElementById("addClientEmail");
+        const addButton = document.getElementById("addClientButton");
+
+        function validateForm() {
+            const title = nameInput.value.trim();
+            const city = cityInput.value.trim();
+            const email = emailInput.value.trim();
+
+
+            const isTitleValid = title !== "";
+            const isCityValid = city !== "";
+            const isEmailValid = email !== "";
+
+            addButton.disabled = !(isTitleValid && isCityValid && isEmailValid);
+        }
+
+        nameInput.addEventListener("input", validateForm);
+        cityInput.addEventListener("input", validateForm);
+        emailInput.addEventListener("input", validateForm);
+
+</script>

@@ -23,5 +23,11 @@ namespace PCLwebb.Controllers
             List<Project> projects = projectList.Where(p => p.Creator.UserName == User.Identity.Name).ToList();
             return View(projects);
         }
+
+        [HttpGet]
+        public IActionResult AddProject()
+        {
+            return View();
+        }
     }
 }

@@ -1,0 +1,31 @@
+﻿@model Project
+
+<h5 class="text-center mt-5">Projektsida</h5>
+
+<div class="border shadow p-2 mt-4">
+    <form asp-action="EditProjectInfo" method="post">
+        <label style="margin-top: 15px;">Kund: </label>
+        <label style="margin-top: 15px;">Projektnamn: </label>
+        <input class="w-100" id="editName" asp-for="Name" />
+        <br />
+        <label style="margin-top: 15px;">Beskrivning: </label>
+        @* <input id="editDescription" asp-for="Description" /> *@
+        <textarea id="editDescription" asp-for="Description" rows="4" class="form-control"></textarea>
+        <br />
+        <label style="margin-top: 15px;">Startdatum: </label>
+        <input type="date" id="editStartdate" asp-for="StartDate" />
+        <br />
+        <label style="margin-top: 15px;">Slutdatum: </label>
+        <input type="date" id="editEnddate" asp-for="EndDate" />
+        <br />
+        <label style="margin-top: 15px;">Status: </label>
+        @* <input asp-for="IsActive" /> *@
+        <select asp-for="IsActive">
+            <option value="true">Aktivt</option>
+            <option value="false">Avslutat</option>
+        </select>
+        <br />
+        <button class="btn btn-primary" style="margin-top: 15px;" id="addChecklistButton" type="submit" disabled>Uppdatera</button>
+    </form>
+
+</div>

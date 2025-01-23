@@ -66,5 +66,13 @@ namespace PCLwebb.Controllers
 
             return RedirectToAction("AllProjects");
         }
+
+        [HttpGet]
+        public IActionResult ProjectInfo(int projectID)
+        {
+            IQueryable<Project> projectList = from p in context.Projects select p;
+            Project project = projectList.Where(p => p.Creator.UserName == User.Identity.Name && p.Id == projectID).ToList().FirstOrDefault();
+            return View(project);
+        }
     }
 }

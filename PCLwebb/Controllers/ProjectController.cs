@@ -163,62 +163,20 @@ namespace PCLwebb.Controllers
 
 
 
-        //[HttpPost]
-        //public IActionResult AddChecklistToProject(int projectId, int checklistID)
-        //{
-        //    if (!User.Identity.IsAuthenticated)
-        //    {
-        //        return RedirectToAction("Index", "Home");
-        //    }
-        //    //IQueryable<User> userList = from user in context.Users select user;
-        //    //userList = userList.Where(user => user.UserName == User.Identity.Name);
-        //    //User theUser = userList.FirstOrDefault();
+        [HttpGet]
+        public IActionResult EditProjectChecklist(int checklistID)
+        {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            IQueryable<User> userList = from user in context.Users select user;
+            userList = userList.Where(user => user.UserName == User.Identity.Name);
+            User theUser = userList.FirstOrDefault();
+            Checklist checklist = context.Checklists.FirstOrDefault(p => p.Id == checklistID && p.Creator.UserName == User.Identity.Name);
 
-        //    //IQueryable<Project> projectList = from p in context.Projects select p;
-        //    //Project theProject = projectList.Where(p => p.Creator.UserName == User.Identity.Name && p.Id == projectId).ToList().FirstOrDefault();
-
-        //    var original = context.Checklists
-        //       .Include(cl => cl.ListTasks)
-        //       .FirstOrDefault(cl => cl.Id == checklistID);
-
-        //    if (original == null) throw new Exception("Checklist not found");
-
-        //    // Skapa kopia av checklistan
-        //    var checklistCopy = new Checklist
-        //    {
-        //        Name = original.Name,
-        //        Description = original.Description,
-        //        IsTemplate = false,
-        //        CreatorID = original.CreatorID,
-        //        ParentChecklistID = original.Id,
-        //        ListTasks = original.ListTasks.Select(task => new ListTask
-        //        {
-        //            Name = task.Name,
-        //            Description = task.Description,
-        //            IsCompleted = false
-        //        }).ToList()
-        //    };
-
-        //    context.Checklists.Add(checklistCopy);
-
-
-        //    // Lägg till kopian i databasen och koppla till projekt
-        //    var project = context.Projects.FirstOrDefault(p => p.Id == projectId);
-        //    if (project == null) throw new Exception("Project not found");
-
-        //    Project_Has_Checklist phc = new Project_Has_Checklist();
-        //    phc.ProjectID = project.Id;
-        //    phc.ChecklistID = checklistCopy.Id;
-        //    //project.ProjectHasChecklists.Add(new Project_Has_Checklist
-        //    //{
-        //    //    Checklist = checklistCopy
-        //    //});
-        //    context.ProjectHasChecklists.Add(phc);
-
-        //    context.SaveChanges();
-
-        //    return RedirectToAction("ProjectInfo", new { projectID = projectId });
-        //}
+            return View(checklist);
+        }
 
     }
 }

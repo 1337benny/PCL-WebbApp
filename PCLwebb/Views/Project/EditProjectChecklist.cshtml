@@ -1,0 +1,72 @@
+﻿@model Checklist
+
+@* <h2>Fyll i checklista: @Model.Name</h2>
+
+<table class="table table-fixed">
+    <thead>
+        <tr>
+            <th style="width: 5%;">Bedömning</th>
+            <th style="width: 25%;">Uppgift</th>
+            <th style="width: 30%;">Beskrivning</th>
+            <th style="width: 10%;">Status</th>
+            <th style="width: 30%;">Notering</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (ListTask task in Model.ListTasks)
+        {
+            <tr>
+                <td><textarea class="w-auto"></textarea></td>
+                <td>@task.Name</td>
+                <td>@task.Description</td>
+                <td>
+                    @if (task.IsCompleted)
+                    {
+                        <span style="background-color: green;">Klar</span>
+                    }
+                    else
+                    {
+                        <span style="background-color: red;">Ej klar</span>
+                    }
+                    
+                </td>
+                <td><textarea class="w-auto"></textarea></td>
+            </tr>
+        }
+    </tbody>
+</table> *@
+
+<h2>Fyll i checklista: @Model.Name</h2>
+
+<table class="table table-bordered table-striped" style="width: 100%; table-layout: fixed;">
+    <thead>
+        <tr>
+            <th style="width: 5%; text-align: left; vertical-align: middle;">Bedömning</th>
+            <th style="width: 25%; text-align: left; vertical-align: middle;">Uppgift</th>
+            <th style="width: 30%; text-align: left; vertical-align: middle;">Beskrivning</th>
+            <th style="width: 10%; text-align: left; vertical-align: middle;">Status</th>
+            <th style="width: 30%; text-align: left; vertical-align: middle;">Notering</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (ListTask task in Model.ListTasks)
+        {
+            <tr>
+                <td><textarea class="form-control" style="width: 100%; resize: none;" rows="3"></textarea></td>
+                <td style="vertical-align: middle;">@task.Name</td>
+                <td style="vertical-align: middle;">@task.Description</td>
+                <td style="vertical-align: middle;">
+                    @if (task.IsCompleted)
+                    {
+                        <span style="background-color: #28a745; color: white; padding: 5px 10px; font-size: 1rem; text-align: center;">Klar</span>
+                    }
+                    else
+                    {
+                        <span style="background-color: #dc3545; color: white; padding: 5px 10px; font-size: 1rem; text-align: center;">Ej klar</span>
+                    }
+                </td>
+                <td><textarea class="form-control" style="width: 100%; resize: none;" rows="3"></textarea></td>
+            </tr>
+        }
+    </tbody>
+</table>

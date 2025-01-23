@@ -27,7 +27,44 @@ namespace PCLwebb.Controllers
         [HttpGet]
         public IActionResult AddProject()
         {
-            return View();
+            IQueryable<Client> clientList = from c in context.Clients select c;
+            List<Client> clients = clientList.Where(c => c.Creator.UserName == User.Identity.Name).ToList();
+            return View(clients);
+        }
+
+        [HttpPost]
+        public IActionResult AddProject(string projectName, string projectDescription, DateOnly projectStartdate, DateOnly projectEnddate, bool projectStatus, int clientID)
+        {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            IQueryable<User> userList = from user in context.Users select user;
+            userList = userList.Where(user => user.UserName == User.Identity.Name);
+            User theUser = userList.FirstOrDefault();
+
+            Project project = new Project();
+            project.Name = projectName;
+            project.Description = projectDescription;
+            project.StartDate = projectStartdate;
+            project.EndDate = projectEnddate;
+            project.IsActive = projectStatus;
+            project.CreatedBy = theUser.Id;
+
+
+            context.Projects.Add(project);
+            context.SaveChanges();
+
+            if (clientID > 0)
+            {
+                Client_Has_Project client_Has_Project = new Client_Has_Project();
+                client_Has_Project.ProjectID = project.Id;
+                client_Has_Project.ClientID = clientID;
+                context.ClientHasProjects.Add(client_Has_Project);
+                context.SaveChanges();
+            }
+
+            return RedirectToAction("AllProjects");
         }
     }
 }

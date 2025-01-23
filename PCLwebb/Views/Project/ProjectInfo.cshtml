@@ -4,28 +4,119 @@
 
 <div class="border shadow p-2 mt-4">
     <form asp-action="EditProjectInfo" method="post">
-        <label style="margin-top: 15px;">Kund: </label>
-        <label style="margin-top: 15px;">Projektnamn: </label>
+        <label class="fw-bold" style="margin-top: 15px;">Kund: 
+            @foreach(Client_Has_Project client_Has_Project in Model.ClientHasProjects){
+                <p class="fw-normal">@client_Has_Project.Client.Name</p>
+            }
+        </label>
+        <br />
+        <label class="fw-bold" style="margin-top: 15px;">Projektnamn: </label>
         <input class="w-100" id="editName" asp-for="Name" />
         <br />
-        <label style="margin-top: 15px;">Beskrivning: </label>
+        <label class="fw-bold" style="margin-top: 15px;">Beskrivning: </label>
         @* <input id="editDescription" asp-for="Description" /> *@
         <textarea id="editDescription" asp-for="Description" rows="4" class="form-control"></textarea>
         <br />
-        <label style="margin-top: 15px;">Startdatum: </label>
+        <label class="fw-bold" style="margin-top: 15px;">Startdatum: </label>
         <input type="date" id="editStartdate" asp-for="StartDate" />
         <br />
-        <label style="margin-top: 15px;">Slutdatum: </label>
+        <label class="fw-bold" style="margin-top: 15px;">Slutdatum: </label>
         <input type="date" id="editEnddate" asp-for="EndDate" />
         <br />
-        <label style="margin-top: 15px;">Status: </label>
+        <label class="fw-bold" style="margin-top: 15px;">Status: </label>
         @* <input asp-for="IsActive" /> *@
         <select asp-for="IsActive">
             <option value="true">Aktivt</option>
             <option value="false">Avslutat</option>
         </select>
         <br />
-        <button class="btn btn-primary" style="margin-top: 15px;" id="addChecklistButton" type="submit" disabled>Uppdatera</button>
+        <input hidden asp-for="Id" />
+        <button class="btn btn-primary" style="margin-top: 15px;" id="updateProjectButton" type="submit" disabled>Uppdatera info</button>
     </form>
 
+    <script>
+        // Hämta alla relevanta input-element
+        const nameInput = document.getElementById("editName");
+        const descriptionInput = document.getElementById("editDescription");
+        const startdateInput = document.getElementById("editStartdate");
+        const enddateInput = document.getElementById("editEnddate");
+        const addButton = document.getElementById("updateProjectButton");
+
+        // Funktion som validerar att alla fält är ifyllda
+        function validateForm() {
+            const name = nameInput.value.trim();
+            const description = descriptionInput.value.trim();
+            const startdate = startdateInput.value.trim();
+            const enddate = enddateInput.value.trim();
+
+            const isNameValid = name !== "";
+            const isDescriptionValid = description !== "";
+            const isStartdateValid = startdate !== "";
+            const isEnddateValid = enddate !== "";
+
+            // Aktivera eller inaktivera knappen baserat på valideringen
+            addButton.disabled = !(isNameValid && isDescriptionValid && isStartdateValid && isEnddateValid);
+        }
+
+        // Lägg till event listeners för att lyssna på ändringar i varje input-fält
+        nameInput.addEventListener("input", validateForm);
+        descriptionInput.addEventListener("input", validateForm);
+        startdateInput.addEventListener("input", validateForm);
+        enddateInput.addEventListener("input", validateForm);
+
+        // Kör validering en gång vid sidladdning för att säkerställa att knappen är korrekt inställd
+        document.addEventListener("DOMContentLoaded", validateForm);
+    </script>
+
+</div>
+
+<div class="border shadow p-2 mt-2">
+    <h4 class="text-center">Checklistor</h4>
+    @if (Model.ProjectHasChecklists.FirstOrDefault() == null){
+        <p>Du har inte lagt till någon checklista ännu.</p>
+    }
+    else{
+        <table class="table table-fixed mt-5">
+            <thead>
+            <td style="width: 25%;" class="fw-bold">Checklista</td>
+            <td style="width: 60%;" class="fw-bold">Beskrivning</td>
+            <td style="width: 15%;" class="fw-bold">Antal uppgifter</td>
+            </thead>
+
+            @foreach(Project_Has_Checklist chp in Model.ProjectHasChecklists){
+
+                <tbody>
+                <td>@chp.Checklist.Name</td>
+                <td>@chp.Checklist.Description</td>
+                <td>
+                        @{
+                            int numberOfTasks = 0;
+                        }
+                        @foreach (ListTask task in @chp.Checklist.ListTasks)
+                        {
+                            numberOfTasks++;
+                        }
+                        @numberOfTasks.ToString()
+                    <a asp-action="EditChecklist" asp-route-checklistID="@chp.Checklist.Id"><button class="btn btn-primary" style="float: right;">Redigera</button></a>
+
+                </td>
+
+                </tbody>
+            
+            }
+
+
+        </table>
+
+
+
+
+
+
+
+
+
+
+
+    }
 </div>

@@ -74,5 +74,30 @@ namespace PCLwebb.Controllers
             Project project = projectList.Where(p => p.Creator.UserName == User.Identity.Name && p.Id == projectID).ToList().FirstOrDefault();
             return View(project);
         }
+
+        [HttpPost]
+        public IActionResult EditProjectInfo(Project updatedProject)
+        {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            IQueryable<User> userList = from user in context.Users select user;
+            userList = userList.Where(user => user.UserName == User.Identity.Name);
+            User theUser = userList.FirstOrDefault();
+
+            IQueryable<Project> projectList = from p in context.Projects select p;
+            Project theProject = projectList.Where(p => p.Creator.UserName == User.Identity.Name && p.Id == updatedProject.Id).ToList().FirstOrDefault();
+
+            theProject.Name = updatedProject.Name;
+            theProject.Description = updatedProject.Description;
+            theProject.StartDate = updatedProject.StartDate;
+            theProject.EndDate = updatedProject.EndDate;
+            theProject.IsActive = updatedProject.IsActive;
+
+            context.Projects.Update(theProject);
+            context.SaveChanges();
+            return RedirectToAction("ProjectInfo", new { projectID = theProject.Id });
+        }
     }
 }

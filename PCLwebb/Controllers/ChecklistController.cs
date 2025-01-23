@@ -20,9 +20,10 @@ namespace PCLwebb.Controllers
             {
                 return RedirectToAction("Index", "Home");
             }
-            IQueryable<User> userList = from user in context.Users select user;
-            List<Checklist> checklists = userList.Where(user => user.UserName == User.Identity.Name).SelectMany(u => u.Checklists).ToList();
-            
+            //IQueryable<User> userList = from user in context.Users select user;
+            //List<Checklist> checklists = userList.Where(user => user.UserName == User.Identity.Name).SelectMany(u => u.Checklists).ToList();
+            IQueryable<Checklist> allChecklists = from c in context.Checklists select c;
+            List<Checklist> checklists = allChecklists.Where(c => c.Creator.UserName == User.Identity.Name && c.IsTemplate == true).ToList();
             return View(checklists);
         }
 

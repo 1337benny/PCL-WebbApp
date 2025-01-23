@@ -10,7 +10,7 @@ namespace PCLwebb.Models
         public string? Description { get; set; }
         public bool IsCompleted { get; set; }
 
-        public int ChecklistID { get; set; }
+        public int? ChecklistID { get; set; }
 
         [ForeignKey(nameof(ChecklistID))]
         public virtual Checklist Checklist { get; set; }

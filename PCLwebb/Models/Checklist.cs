@@ -11,6 +11,12 @@ namespace PCLwebb.Models
 
         public string CreatorID { get; set; }
 
+        public bool IsTemplate { get; set; } = true; // Standardvärde för mallar
+        public int? ParentChecklistID { get; set; } // Pekar på mallen om detta är en kopia
+
+        [ForeignKey("ParentChecklistID")]
+        public virtual Checklist? ParentChecklist { get; set; }
+
         [ForeignKey(nameof(CreatorID))]
         public virtual User Creator { get; set; }
         public virtual IEnumerable<Project_Has_Checklist> ProjectHasChecklists { get; set; } = new List<Project_Has_Checklist>();

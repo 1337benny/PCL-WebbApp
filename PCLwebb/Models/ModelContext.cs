@@ -64,10 +64,17 @@ namespace PCLwebb.Models
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Checklist>()
-               .HasOne(cl => cl.Creator)
-               .WithMany(u => u.Checklists)
-               .HasForeignKey(cl => cl.CreatorID)
-               .OnDelete(DeleteBehavior.NoAction);
+                .HasOne(cl => cl.Creator)
+                .WithMany(u => u.Checklists)
+                .HasForeignKey(cl => cl.CreatorID)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Checklist>()
+                .HasOne(cl => cl.ParentChecklist)
+                .WithMany()
+                .HasForeignKey(cl => cl.ParentChecklistID)
+                .OnDelete(DeleteBehavior.Restrict); // För att undvika oavsiktlig radering av mallar
+
 
             modelBuilder.Entity<Project>()
                 .HasOne(p => p.Creator)

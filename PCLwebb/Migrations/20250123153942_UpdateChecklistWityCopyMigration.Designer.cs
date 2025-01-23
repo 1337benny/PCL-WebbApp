@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PCLwebb.Models;
 
@@ -11,9 +12,11 @@ using PCLwebb.Models;
 namespace PCLwebb.Migrations
 {
     [DbContext(typeof(ModelContext))]
-    partial class ModelContextModelSnapshot : ModelSnapshot
+    [Migration("20250123153942_UpdateChecklistWityCopyMigration")]
+    partial class UpdateChecklistWityCopyMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -245,7 +248,7 @@ namespace PCLwebb.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("ChecklistID")
+                    b.Property<int>("ChecklistID")
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
@@ -501,7 +504,8 @@ namespace PCLwebb.Migrations
                     b.HasOne("PCLwebb.Models.Checklist", "Checklist")
                         .WithMany("ListTasks")
                         .HasForeignKey("ChecklistID")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Checklist");
                 });

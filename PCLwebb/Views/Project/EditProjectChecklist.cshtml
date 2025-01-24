@@ -2,13 +2,32 @@
 
 <h2>Fyll i checklista: @Model.Name</h2>
 
-<div class="p-3 m-3">
+<div>
+    <table class="table table-bordered table-striped" style="width: 100%; table-layout: fixed;">
+        <thead>
+            <tr>
+                
+                <th style="width: 30%; text-align: left; vertical-align: middle;">Kund</th>
+                <th style="width: 10%; text-align: left; vertical-align: middle;">Stad</th>
+                <th style="width: 30%; text-align: left; vertical-align: middle;">Epost</th>
+            </tr>
+        </thead>
+        <tbody>
+           <td>@Model.ProjectHasChecklists.FirstOrDefault().Project.ClientHasProjects.FirstOrDefault().Client.Name</td>
+        <td>@Model.ProjectHasChecklists.FirstOrDefault().Project.ClientHasProjects.FirstOrDefault().Client.City</td>
+        <td>@Model.ProjectHasChecklists.FirstOrDefault().Project.ClientHasProjects.FirstOrDefault().Client.Email</td>
+        </tbody>
+    </table>
+</div>
+
+
+<div class="p-1 m-1">
     <label>Bedömningar:</label>
-    <p>(X) = Klar utan anmärkning.</p>
-    <p>(1) = Bör åtgärdas.</p>
-    <p>(2) = Skall åtgärdas.</p>
-    <p>(Å) = Åtgärdat.</p>
-    <p>(-) = Ej tillämligt.</p>
+    <p><span class="fw-bold">(X)</span> = Klar utan anmärkning.
+    <span class="fw-bold">(1)</span> = Bör åtgärdas.
+    <span class="fw-bold">(2)</span> = Skall åtgärdas.
+    <span class="fw-bold">(Å)</span> = Åtgärdat.
+    <span class="fw-bold">(-)</span> = Ej tillämligt.</p>
 </div>
 
 
@@ -67,4 +86,5 @@
     <button type="submit" class="btn btn-primary mt-3">Spara</button>
 </form>
 
+<button id="save-pdf" class="btn btn-success">Spara som PDF</button>
 

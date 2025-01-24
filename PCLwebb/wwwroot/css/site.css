@@ -21,3 +21,8 @@ body {
   margin-bottom: 60px;
   padding-bottom: 60px;
 }
+
+.hover:hover{
+    transform: scale(1.1);
+    color: blue;
+}

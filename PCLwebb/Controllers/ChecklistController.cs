@@ -105,10 +105,33 @@ namespace PCLwebb.Controllers
             checkLists = checkLists.Where(c => c.Id == checklistID && c.Creator.UserName == User.Identity.Name);
             Checklist theChecklist = checkLists.FirstOrDefault();
 
+            //Krashar om man försöker ta bort en checklista som har kopior
             context.Checklists.Remove(theChecklist);
             context.SaveChanges();
 
             return RedirectToAction("AllChecklists");
+        }
+
+        public IActionResult DeleteChecklistFromProject(int projectId, int checklistID)
+        {
+            if (!User.Identity.IsAuthenticated)
+            {
+                RedirectToAction("Index", "Home");
+            }
+
+            IQueryable<Checklist> checkLists = from check in context.Checklists select check;
+            checkLists = checkLists.Where(c => c.Id == checklistID && c.Creator.UserName == User.Identity.Name);
+            Checklist theChecklist = checkLists.FirstOrDefault();
+
+            IQueryable<Project_Has_Checklist> phc = from p in context.ProjectHasChecklists select p;
+            phc = phc.Where(c => c.ChecklistID == checklistID && c.ProjectID == projectId && c.Checklist.Creator.UserName == User.Identity.Name);
+            Project_Has_Checklist thePhc = phc.FirstOrDefault();
+
+            context.ProjectHasChecklists.Remove(thePhc);
+            context.Checklists.Remove(theChecklist);
+            context.SaveChanges();
+
+            return RedirectToAction("ProjectInfo", "Project", new { projectID = projectId });
         }
 
     }

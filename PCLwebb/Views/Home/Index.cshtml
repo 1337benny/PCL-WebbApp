@@ -1,37 +1,4 @@
-﻿@* @model User
-@{
-    ViewData["Title"] = "Startsida";
-}
-
-@if (Model == null){
-    <h1 class="text-center">Välkommen till PCL – Din partner för framgångsrik projekt- och kundhantering</h1>
-    <div class="w-75 border border shadow p-5">
-        <p>
-
-            PCL är verktyget som gör det enkelt att strukturera och dokumentera dina projekt och kundrelationer. Oavsett om du arbetar ensam eller i team, hjälper PCL dig att hålla ordning på alla delar av ditt arbete – från checklistor och uppgifter till kundinformation och projektframsteg.
-
-            Med PCL kan du:
-
-            Skapa checklistor och använda dem som mallar för flera projekt.
-            Dokumentera dina framsteg på ett tydligt och strukturerat sätt.
-            Hålla koll på dina kunder och se till att inget faller mellan stolarna.
-            Vårt mål är att förenkla din vardag och ge dig mer tid att fokusera på det som verkligen räknas – att leverera fantastiska resultat till dina kunder.
-
-            Kom igång idag och upplev hur PCL kan göra din arbetsdag smidigare och mer produktiv!
-        </p>
-    </div>
-}
-else{
-
-
-
-<div class="text-center">
-    <h1 class="display-4">Välkommen @Model.Firstname</h1>
-</div>
-}
- *@
-
-            @model User
+﻿@model User
 @{
     ViewData["Title"] = "Startsida";
 }
@@ -76,7 +43,10 @@ else
     <div class="container my-5">
         <div class="text-center">
             <h1 class="display-4">Välkommen @Model.Firstname!</h1>
-            <p class="lead">Dags att fortsätta dina projekt och skapa framgång med PCL.</p>
+            <p class="lead">Dags att fortsätta med dina projekt och skapa framgång med PCL.</p>
+            <a asp-controller="Project" asp-action="AddProject" class="btn btn-success btn-lg mt-5">Skapa ett nytt projekt</a>
         </div>
     </div>
+
+    
 }

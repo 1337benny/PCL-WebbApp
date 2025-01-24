@@ -1,45 +1,64 @@
 ﻿@model Checklist
 
-<h2>Fyll i checklista: @Model.Name</h2>
+<h2 class="text-center">@Model.Name</h2>
 
+<!-- Kundinformation tabell -->
 <div>
-    <table class="table table-bordered table-striped" style="width: 100%; table-layout: fixed;">
+    <table id="customer-table" class="table table-bordered table-striped" style="width: 100%; table-layout: fixed;">
         <thead>
             <tr>
-                
-                <th style="width: 30%; text-align: left; vertical-align: middle;">Kund</th>
-                <th style="width: 10%; text-align: left; vertical-align: middle;">Stad</th>
-                <th style="width: 30%; text-align: left; vertical-align: middle;">Epost</th>
+                <th style="width: 35%; text-align: left; vertical-align: middle;">Kund</th>
+                <th style="width: 30%; text-align: left; vertical-align: middle;">Stad</th>
+                <th style="width: 35%; text-align: left; vertical-align: middle;">Epost</th>
             </tr>
         </thead>
         <tbody>
-           <td>@Model.ProjectHasChecklists.FirstOrDefault().Project.ClientHasProjects.FirstOrDefault().Client.Name</td>
-        <td>@Model.ProjectHasChecklists.FirstOrDefault().Project.ClientHasProjects.FirstOrDefault().Client.City</td>
-        <td>@Model.ProjectHasChecklists.FirstOrDefault().Project.ClientHasProjects.FirstOrDefault().Client.Email</td>
+            <tr>
+                <td>@Model.ProjectHasChecklists.FirstOrDefault().Project.ClientHasProjects.FirstOrDefault().Client.Name</td>
+                <td>@Model.ProjectHasChecklists.FirstOrDefault().Project.ClientHasProjects.FirstOrDefault().Client.City</td>
+                <td>@Model.ProjectHasChecklists.FirstOrDefault().Project.ClientHasProjects.FirstOrDefault().Client.Email</td>
+            </tr>
         </tbody>
     </table>
 </div>
 
-
-<div class="p-1 m-1">
-    <label>Bedömningar:</label>
-    <p><span class="fw-bold">(X)</span> = Klar utan anmärkning.
-    <span class="fw-bold">(1)</span> = Bör åtgärdas.
-    <span class="fw-bold">(2)</span> = Skall åtgärdas.
-    <span class="fw-bold">(Å)</span> = Åtgärdat.
-    <span class="fw-bold">(-)</span> = Ej tillämligt.</p>
+<!-- Bedömning tabell -->
+<div>
+    <table id="assessment-table" class="table table-bordered table-striped" style="width: 100%; table-layout: fixed;">
+        <thead>
+            <tr>
+                <th style="width: 50%; text-align: left; vertical-align: middle;">Bedömning av</th>
+                <th style="width: 50%; text-align: left; vertical-align: middle;">Signatur</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>@Model.Creator.Firstname @Model.Creator.Lastname</td>
+                <td></td>
+            </tr>
+        </tbody>
+    </table>
 </div>
 
-
-
+<!-- Bedömningar -->
+<div class="p-1 m-1">
+    <label>Bedömningar:</label>
+    <p>
+        <span class="fw-bold">(X)</span> = Klar utan anmärkning.
+        <span class="fw-bold">(1)</span> = Bör åtgärdas.
+        <span class="fw-bold">(2)</span> = Skall åtgärdas.
+        <span class="fw-bold">(Å)</span> = Åtgärdat.
+        <span class="fw-bold">(-)</span> = Ej tillämligt.
+    </p>
+</div>
 @{
-    var tasks = Model.ListTasks.ToList(); // Gör om IEnumerable till en lista
+    var tasks = Model.ListTasks.ToList();
 }
-
+<!-- Uppgifter tabell -->
 <form asp-action="UpdateProjectChecklist" method="post">
     <input type="hidden" asp-for="Id" />
 
-    <table class="table table-bordered table-striped" style="width: 100%; table-layout: fixed;">
+    <table id="tasks-table" class="table table-bordered table-striped" style="width: 100%; table-layout: fixed;">
         <thead>
             <tr>
                 <th style="width: 5%; text-align: left; vertical-align: middle;">Bed.</th>
@@ -57,7 +76,6 @@
 
                 <tr>
                     <input type="hidden" name="ListTasks[@i].Id" value="@tasks[i].Id" />
-
                     <td>
                         <select name="ListTasks[@i].Assessment" class="form-control" style="width: 100%;">
                             <option value="X" selected="@(assessment == "X")">X</option>
@@ -87,4 +105,75 @@
 </form>
 
 <button id="save-pdf" class="btn btn-success">Spara som PDF</button>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.15/jspdf.plugin.autotable.min.js"></script>
+<script>
+    document.getElementById('save-pdf').addEventListener('click', function () {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+
+        // Lägg till titel
+        doc.setFontSize(18);
+        doc.text("Checklist för: " + "@Model.Name", 14, 20);
+
+        // Lägg till första tabellen - Kundinformation
+        doc.setFontSize(12);
+        doc.text("Kundinformation", 14, 30);
+        doc.autoTable({
+            html: '#customer-table', // Tabellens ID för kundinformationen
+            startY: 40,
+            styles: { fontSize: 10, cellPadding: 5 },
+            headStyles: { fillColor: [22, 160, 133] },
+            margin: { top: 30 },
+            pageBreak: 'auto', // Förhindrar att en ny sida skapas för tidigt
+            showHead: 'firstPage' // Dölj rubriker på följande sidor om det behövs
+        });
+
+        // Lägg till andra tabellen - Bedömning av
+        doc.addPage(); // Skapa en ny sida
+        doc.text("Bedömning av", 14, 20);
+        doc.autoTable({
+            html: '#assessment-table', // Tabellens ID för bedömning
+            startY: 30,
+            styles: { fontSize: 10, cellPadding: 5 },
+            headStyles: { fillColor: [22, 160, 133] }
+        });
+
+        // Lägg till beskrivningar av bedömningarna
+        doc.addPage(); // Ny sida
+        doc.text("Bedömningar:", 14, 20);
+        doc.setFontSize(10);
+        doc.text("(X) = Klar utan anmärkning.\n(1) = Bör åtgärdas.\n(2) = Skall åtgärdas.\n(Å) = Åtgärdat.\n(-) = Ej tillämligt.", 14, 30);
+
+        // Förbered data för uppgifterna (dynamiskt från Razor till JavaScript)
+        const taskData = @Html.Raw(Json.Serialize(Model.ListTasks.Select(task => new
+        {
+            task.Assessment,
+            task.Name,
+            task.Description,
+            IsCompleted = task.IsCompleted ? "Klar" : "Ej Klar",
+            task.Note
+        })));
+
+        // Lägg till listan med uppgifter i PDF:en
+        doc.addPage(); // Ny sida
+        doc.text("Uppgifter", 14, 20);
+        doc.autoTable({
+            head: [['Bed.', 'Uppgift', 'Beskrivning', 'Status', 'Notering']], // Rubriker för tabellen
+            body: taskData.map(item => [item.Assessment, item.Name, item.Description, item.IsCompleted, item.Note]), // Uppgifter
+            startY: 30, // Startpunkt för tabellen
+            styles: { fontSize: 10, cellPadding: 5 },
+            headStyles: { fillColor: [22, 160, 133] },
+            pageBreak: 'auto', // Skapa en ny sida om det behövs
+            showHead: 'firstPage' // Dölj rubriker på följande sidor om det behövs
+        });
+
+        // Spara PDF
+        doc.save('checklist.pdf');
+    });
+</script>
+
+
 

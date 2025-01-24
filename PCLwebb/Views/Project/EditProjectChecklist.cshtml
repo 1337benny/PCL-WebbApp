@@ -1,72 +1,70 @@
 ﻿@model Checklist
 
-@* <h2>Fyll i checklista: @Model.Name</h2>
-
-<table class="table table-fixed">
-    <thead>
-        <tr>
-            <th style="width: 5%;">Bedömning</th>
-            <th style="width: 25%;">Uppgift</th>
-            <th style="width: 30%;">Beskrivning</th>
-            <th style="width: 10%;">Status</th>
-            <th style="width: 30%;">Notering</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (ListTask task in Model.ListTasks)
-        {
-            <tr>
-                <td><textarea class="w-auto"></textarea></td>
-                <td>@task.Name</td>
-                <td>@task.Description</td>
-                <td>
-                    @if (task.IsCompleted)
-                    {
-                        <span style="background-color: green;">Klar</span>
-                    }
-                    else
-                    {
-                        <span style="background-color: red;">Ej klar</span>
-                    }
-                    
-                </td>
-                <td><textarea class="w-auto"></textarea></td>
-            </tr>
-        }
-    </tbody>
-</table> *@
-
 <h2>Fyll i checklista: @Model.Name</h2>
 
-<table class="table table-bordered table-striped" style="width: 100%; table-layout: fixed;">
-    <thead>
-        <tr>
-            <th style="width: 5%; text-align: left; vertical-align: middle;">Bedömning</th>
-            <th style="width: 25%; text-align: left; vertical-align: middle;">Uppgift</th>
-            <th style="width: 30%; text-align: left; vertical-align: middle;">Beskrivning</th>
-            <th style="width: 10%; text-align: left; vertical-align: middle;">Status</th>
-            <th style="width: 30%; text-align: left; vertical-align: middle;">Notering</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (ListTask task in Model.ListTasks)
-        {
+<div class="p-3 m-3">
+    <label>Bedömningar:</label>
+    <p>(X) = Klar utan anmärkning.</p>
+    <p>(1) = Bör åtgärdas.</p>
+    <p>(2) = Skall åtgärdas.</p>
+    <p>(Å) = Åtgärdat.</p>
+    <p>(-) = Ej tillämligt.</p>
+</div>
+
+
+
+@{
+    var tasks = Model.ListTasks.ToList(); // Gör om IEnumerable till en lista
+}
+
+<form asp-action="UpdateProjectChecklist" method="post">
+    <input type="hidden" asp-for="Id" />
+
+    <table class="table table-bordered table-striped" style="width: 100%; table-layout: fixed;">
+        <thead>
             <tr>
-                <td><textarea class="form-control" style="width: 100%; resize: none;" rows="3"></textarea></td>
-                <td style="vertical-align: middle;">@task.Name</td>
-                <td style="vertical-align: middle;">@task.Description</td>
-                <td style="vertical-align: middle;">
-                    @if (task.IsCompleted)
-                    {
-                        <span style="background-color: #28a745; color: white; padding: 5px 10px; font-size: 1rem; text-align: center;">Klar</span>
-                    }
-                    else
-                    {
-                        <span style="background-color: #dc3545; color: white; padding: 5px 10px; font-size: 1rem; text-align: center;">Ej klar</span>
-                    }
-                </td>
-                <td><textarea class="form-control" style="width: 100%; resize: none;" rows="3"></textarea></td>
+                <th style="width: 5%; text-align: left; vertical-align: middle;">Bed.</th>
+                <th style="width: 25%; text-align: left; vertical-align: middle;">Uppgift</th>
+                <th style="width: 30%; text-align: left; vertical-align: middle;">Beskrivning</th>
+                <th style="width: 10%; text-align: left; vertical-align: middle;">Status</th>
+                <th style="width: 30%; text-align: left; vertical-align: middle;">Notering</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @for (var i = 0; i < tasks.Count; i++)
+            {
+                var assessment = tasks[i].Assessment ?? "-"; // Standardvärde om Assessment är null
+                var isCompleted = tasks[i].IsCompleted.ToString().ToLower();
+
+                <tr>
+                    <input type="hidden" name="ListTasks[@i].Id" value="@tasks[i].Id" />
+
+                    <td>
+                        <select name="ListTasks[@i].Assessment" class="form-control" style="width: 100%;">
+                            <option value="X" selected="@(assessment == "X")">X</option>
+                            <option value="1" selected="@(assessment == "1")">1</option>
+                            <option value="2" selected="@(assessment == "2")">2</option>
+                            <option value="Å" selected="@(assessment == "Å")">Å</option>
+                            <option value="-" selected="@(assessment == "-")">-</option>
+                        </select>
+                    </td>
+                    <td style="vertical-align: middle;">@tasks[i].Name</td>
+                    <td style="vertical-align: middle;">@tasks[i].Description</td>
+                    <td>
+                        <select name="ListTasks[@i].IsCompleted" class="form-control" style="width: 100%;">
+                            <option value="true" selected="@(isCompleted == "true")">Klar</option>
+                            <option value="false" selected="@(isCompleted == "false")">Ej Klar</option>
+                        </select>
+                    </td>
+                    <td>
+                        <textarea name="ListTasks[@i].Note" class="form-control" style="width: 100%; resize: none;" rows="3">@tasks[i].Note</textarea>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <button type="submit" class="btn btn-primary mt-3">Spara</button>
+</form>
+
+

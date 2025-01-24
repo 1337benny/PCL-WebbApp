@@ -104,76 +104,110 @@
     <button type="submit" class="btn btn-primary mt-3">Spara</button>
 </form>
 
+<table id="tasks-table-copy" class="table table-bordered table-striped" style="width: 100%; table-layout: fixed;" hidden>
+    <thead>
+        <tr>
+            <th style="width: 5%; text-align: left; vertical-align: middle;">Bed.</th>
+            <th style="width: 25%; text-align: left; vertical-align: middle;">Uppgift</th>
+            <th style="width: 30%; text-align: left; vertical-align: middle;">Beskrivning</th>
+            <th style="width: 10%; text-align: left; vertical-align: middle;">Status</th>
+            <th style="width: 30%; text-align: left; vertical-align: middle;">Notering</th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (var i = 0; i < tasks.Count; i++)
+        {
+            var assessment = tasks[i].Assessment ?? "-"; // Standardvärde om Assessment är null
+            var isCompleted = tasks[i].IsCompleted.ToString().ToLower();
+
+            <tr>
+                
+                <td>
+                    @tasks[i].Assessment
+                </td>
+                <td style="vertical-align: middle;">@tasks[i].Name</td>
+                <td style="vertical-align: middle;">@tasks[i].Description</td>
+                <td>
+                    @if (@tasks[i].IsCompleted){
+                        <span>Klar</span>
+                    }
+                    else{
+                        <span>Ej klar</span>
+                    }
+                </td>
+                <td>
+                    @tasks[i].Note
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
 <button id="save-pdf" class="btn btn-success">Spara som PDF</button>
 
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.15/jspdf.plugin.autotable.min.js"></script>
 <script>
-    document.getElementById('save-pdf').addEventListener('click', function () {
+
+                document.getElementById('save-pdf').addEventListener('click', function () {
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
 
+        // Startpunkt för första tabellen
+        let currentY = 20;
+
         // Lägg till titel
         doc.setFontSize(18);
-        doc.text("Checklist för: " + "@Model.Name", 14, 20);
+        doc.text("@Model.Name", 14, currentY);
+        currentY += 3; // Flytta nedåt för nästa innehåll
 
         // Lägg till första tabellen - Kundinformation
         doc.setFontSize(12);
-        doc.text("Kundinformation", 14, 30);
+        
+        currentY += 3;
         doc.autoTable({
-            html: '#customer-table', // Tabellens ID för kundinformationen
-            startY: 40,
+            html: '#customer-table',
+            startY: currentY,
             styles: { fontSize: 10, cellPadding: 5 },
             headStyles: { fillColor: [22, 160, 133] },
-            margin: { top: 30 },
-            pageBreak: 'auto', // Förhindrar att en ny sida skapas för tidigt
-            showHead: 'firstPage' // Dölj rubriker på följande sidor om det behövs
+            pageBreak: 'auto',
+            showHead: 'firstPage'
         });
+        currentY = doc.lastAutoTable.finalY + 10; // Uppdatera Y-position efter första tabellen
 
         // Lägg till andra tabellen - Bedömning av
-        doc.addPage(); // Skapa en ny sida
-        doc.text("Bedömning av", 14, 20);
+        
+        currentY += 3;
         doc.autoTable({
-            html: '#assessment-table', // Tabellens ID för bedömning
-            startY: 30,
-            styles: { fontSize: 10, cellPadding: 5 },
-            headStyles: { fillColor: [22, 160, 133] }
-        });
-
-        // Lägg till beskrivningar av bedömningarna
-        doc.addPage(); // Ny sida
-        doc.text("Bedömningar:", 14, 20);
-        doc.setFontSize(10);
-        doc.text("(X) = Klar utan anmärkning.\n(1) = Bör åtgärdas.\n(2) = Skall åtgärdas.\n(Å) = Åtgärdat.\n(-) = Ej tillämligt.", 14, 30);
-
-        // Förbered data för uppgifterna (dynamiskt från Razor till JavaScript)
-        const taskData = @Html.Raw(Json.Serialize(Model.ListTasks.Select(task => new
-        {
-            task.Assessment,
-            task.Name,
-            task.Description,
-            IsCompleted = task.IsCompleted ? "Klar" : "Ej Klar",
-            task.Note
-        })));
-
-        // Lägg till listan med uppgifter i PDF:en
-        doc.addPage(); // Ny sida
-        doc.text("Uppgifter", 14, 20);
-        doc.autoTable({
-            head: [['Bed.', 'Uppgift', 'Beskrivning', 'Status', 'Notering']], // Rubriker för tabellen
-            body: taskData.map(item => [item.Assessment, item.Name, item.Description, item.IsCompleted, item.Note]), // Uppgifter
-            startY: 30, // Startpunkt för tabellen
+            html: '#assessment-table',
+            startY: currentY,
             styles: { fontSize: 10, cellPadding: 5 },
             headStyles: { fillColor: [22, 160, 133] },
-            pageBreak: 'auto', // Skapa en ny sida om det behövs
-            showHead: 'firstPage' // Dölj rubriker på följande sidor om det behövs
+            pageBreak: 'auto'
+        });
+        currentY = doc.lastAutoTable.finalY + 10; // Uppdatera Y-position efter andra tabellen
+
+        // Lägg till tredje tabellen - Uppgifter
+            doc.setFontSize(10);
+            doc.text("(X) = Klar utan anmärkning. (1) = Bör åtgärdas. (2) = Skall åtgärdas. (Å) = Åtgärdat. (-) = Ej tillämpligt ", 20, currentY);
+        currentY += 3;
+        doc.autoTable({
+            html: '#tasks-table-copy',
+            startY: currentY,
+            styles: { fontSize: 10, cellPadding: 5 },
+            headStyles: { fillColor: [22, 160, 133] },
+            pageBreak: 'auto'
         });
 
         // Spara PDF
-        doc.save('checklist.pdf');
+        doc.save("@Model.Name" + ".pdf");
     });
+
+
+
 </script>
+
 
 
 

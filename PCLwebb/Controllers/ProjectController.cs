@@ -170,11 +170,13 @@ namespace PCLwebb.Controllers
             {
                 return RedirectToAction("Index", "Home");
             }
-            IQueryable<User> userList = from user in context.Users select user;
-            userList = userList.Where(user => user.UserName == User.Identity.Name);
-            User theUser = userList.FirstOrDefault();
-            Checklist checklist = context.Checklists.FirstOrDefault(p => p.Id == checklistID && p.Creator.UserName == User.Identity.Name);
-
+            //IQueryable<User> userList = from user in context.Users select user;
+            //userList = userList.Where(user => user.UserName == User.Identity.Name);
+            //User theUser = userList.FirstOrDefault();
+            //Checklist checklist = context.Checklists.FirstOrDefault(p => p.Id == checklistID && p.Creator.UserName == User.Identity.Name);
+            Checklist checklist = context.Checklists
+                .Include(c => c.ListTasks) 
+                .FirstOrDefault(c => c.Id == checklistID && c.Creator.UserName == User.Identity.Name);
             return View(checklist);
         }
 
@@ -221,47 +223,7 @@ namespace PCLwebb.Controllers
 
 
 
-        //[HttpPost]
-        //public IActionResult UpdateProjectChecklist(Checklist checklist)
-        //{
-
-        //        // Hämta den befintliga checklistan från databasen
-        //        var existingChecklist = context.Checklists
-        //            .Include(c => c.ListTasks) // Ladda ListTasks
-        //            .FirstOrDefault(c => c.Id == checklist.Id);
-
-        //        if (existingChecklist != null)
-        //        {
-        //            // Uppdatera varje task i checklistan
-        //            foreach (var updatedTask in checklist.ListTasks)
-        //            {
-        //                var existingTask = existingChecklist.ListTasks
-        //                    .FirstOrDefault(t => t.Id == updatedTask.Id);
-
-        //                if (existingTask != null)
-        //                {
-        //                    existingTask.Assessment = updatedTask.Assessment;
-        //                    existingTask.IsCompleted = updatedTask.IsCompleted;
-        //                    existingTask.Note = updatedTask.Note;
-
-        //                context.ListTasks.Update(existingTask);
-        //                }
-        //            }
-        //            context.Checklists.Update(existingChecklist);
-        //            // Spara ändringar till databasen
-        //            context.SaveChanges();
-
-        //            // Återvänd till en bekräftelsesida eller samma sida
-        //            return RedirectToAction("EditProjectChecklist", new { checklistID = checklist.Id });
-        //        }
-        //        else
-        //        {
-        //            // Hantera om checklistan inte hittas
-        //            ModelState.AddModelError("", "Checklistan kunde inte hittas.");
-        //        return RedirectToAction("EditProjectChecklist", new { checklistID = checklist.Id });
-        //    }
-
-        //}
+       
 
 
     }

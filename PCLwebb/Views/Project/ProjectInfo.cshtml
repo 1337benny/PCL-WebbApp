@@ -1,5 +1,6 @@
 ﻿@model Project
 
+
 <h5 class="text-center my-5">Projektsida</h5>
 
 <div class="border shadow p-2 my-4">
@@ -84,7 +85,27 @@
             </thead>
 
             @foreach(Project_Has_Checklist chp in Model.ProjectHasChecklists){
-
+                <div class="modal fade" id="deleteChecklistModal-@chp.Checklist.Id" tabindex="-1" aria-labelledby="deleteChecklistModalLabel-@chp.Checklist.Id" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="deleteChecklistModalLabel-@chp.Checklist.Id">Bekräfta borttagning</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                Vill du ta bort checklistan från projektet? Mallen kommer att finnas kvar bland dina checklistor.
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Avbryt</button>
+                                <form asp-controller="Checklist" asp-action="DeleteChecklistFromProject" method="post">
+                                    <input type="hidden" name="checklistID" value="@chp.Checklist.Id" />
+                                    <input type="hidden" name="projectId" value="@Model.Id" />
+                                    <button type="submit" class="btn btn-danger">Ta bort</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <tbody>
                 <td>@chp.Checklist.Name</td>
                 <td>@chp.Checklist.Description</td>
@@ -97,17 +118,11 @@
                             numberOfTasks++;
                         }
                         @numberOfTasks.ToString()
-                    <a asp-controller="Checklist"
-                       asp-action="DeleteChecklistFromProject"
-                       asp-route-checklistID="@chp.Checklist.Id"
-                       asp-route-projectId="@Model.Id"
-                       id="deleteChecklistLink">
-                        <button type="button" class="btn btn-danger" style="float: right;">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
-                                <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5" />
-                            </svg>
-                        </button>
-                    </a>
+                    <button type="button" class="btn btn-danger" style="float: right;" data-bs-toggle="modal" data-bs-target="#deleteChecklistModal-@chp.Checklist.Id">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
+                            <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5" />
+                        </svg>
+                    </button>
 
 
                     <a asp-action="EditProjectChecklist" asp-route-checklistID="@chp.Checklist.Id"><button class="btn btn-primary" style="float: right;">
@@ -163,19 +178,4 @@
     </div>
 </div>
 
-<script>
-            document.getElementById('deleteChecklistLink').addEventListener('click', function(event) {
-        // Förhindra standardbeteendet för länken
-        event.preventDefault();
 
-        // Visa bekräftelserutan
-        const userConfirmed = confirm("Vill du ta bort checklistan?");
-
-        // Om användaren klickar "Ja", följ länken
-        if (userConfirmed) {
-            window.location.href = this.href;
-        }
-    });
-
-
-</script>

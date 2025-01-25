@@ -131,5 +131,66 @@ namespace PCLwebb.Controllers
             context.SaveChanges();
             return RedirectToAction("Profile");
         }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateUserPassword(string oldPassword, string newPassword, string confirmPassword)
+        {
+            IQueryable<User> list = from user in context.Users where user.UserName == User.Identity.Name select user;
+            User logUser = list.FirstOrDefault();
+
+            
+
+            //Kollar om alla fält är ifyllda
+            if (ModelState.IsValid)
+            {
+                //Om kontrollen av det nya lösenordet inte stämmer, avbryt.
+                if (!newPassword.Equals(confirmPassword))
+                {
+                    ModelState.AddModelError("Losenord", "Det nya lösenordet matchar inte.");
+                    return View("Profile", logUser);
+                }
+
+                //Försök att ändra lösenord
+                var result = await userManager.ChangePasswordAsync(logUser, oldPassword, newPassword);
+
+
+                if (result.Succeeded)
+                {
+                    TempData["SuccessMessage"] = "Lösenordet har uppdaterats!";
+                    return RedirectToAction("Profile");
+                }
+
+
+                else
+                {
+                    foreach (var error in result.Errors)
+                    {
+                        //Om error är att det gamla lösenordet inte stämmer med databasen
+                        if (error.Code == "PasswordMismatch")
+                        {
+                            ModelState.AddModelError("Losenord", "Det gamla lösenordet är inte korrekt. Lösenordet har inte ändrats.");
+                            return View("Profile", logUser);
+                        }
+
+                    }
+                    //Skriv ut "regex" för lösenordets krav.
+                    ModelState.AddModelError("", "Lösenordet måste innehålla:");
+                    ModelState.AddModelError("", "Minst 6 tecken långt");
+                    ModelState.AddModelError("", "Bokstav, stor och liten");
+                    ModelState.AddModelError("", "Tecken (ex: !%&=?)");
+                    return View("Profile", logUser);
+
+                }
+
+
+            }
+            else
+            {
+                //Skickar tillbaka vilka fält som glömts
+                return View("EditProfile", logUser);
+            }
+
+
+        }
     }
 }

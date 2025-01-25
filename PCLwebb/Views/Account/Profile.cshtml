@@ -1,5 +1,7 @@
 ﻿@model User
 
+<div asp-validation-summary="All" class="text-danger"></div>
+
 <h5 class="text-center">Min profil</h5>
 
 <div class="border my-5 p-3">
@@ -20,6 +22,31 @@
 		<button id="submitButton" class="btn btn-outline-success mt-5" type="submit">Uppdatera info</button>
 	</form>
 
+</div>
+
+@if (TempData["SuccessMessage"] != null)
+{
+	<div class="alert alert-success">
+		@TempData["SuccessMessage"]
+	</div>
+}
+
+
+<div class="border shadow" style="padding: 1rem;">
+	<h5 style="margin-top: 20px;">Ändra lösenord:</h5>
+	<form asp-action="UpdateUserPassword" method="post">
+		<label style="margin-top: 1rem;">Gammalt lösenord: </label>
+		<input type="password" name="oldPassword" />
+		<br />
+		<label style="margin-top: 1rem;">Nytt lösenord: </label>
+		<input type="password" name="newPassword" />
+		<br />
+		<label style="margin-top: 1rem;">Upprepa nytt lösenord: </label>
+		<input type="password" name="confirmPassword" />
+		<br />
+
+		<button style="margin-top: 1rem;" class="btn btn-primary" type="submit">Spara</button>
+	</form>
 </div>
 
 <script>

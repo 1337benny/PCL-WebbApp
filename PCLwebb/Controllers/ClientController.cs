@@ -75,6 +75,17 @@ namespace PCLwebb.Controllers
             clientList = clientList.Where(c => c.Id == clientID && c.Creator.UserName == User.Identity.Name);
             Client theClient = clientList.FirstOrDefault();
 
+            IQueryable<Client_Has_Project> chpList = from chp in context.ClientHasProjects select chp;
+            chpList = chpList.Where(c => c.ClientID == clientID && c.Client.Creator.UserName == User.Identity.Name);
+            
+            List<Client_Has_Project> client_Has_Projects = chpList.ToList();
+
+            foreach (Client_Has_Project chp  in client_Has_Projects)
+            {
+                context.ClientHasProjects.Remove(chp);
+                context.SaveChanges();
+            }
+
             context.Clients.Remove(theClient);
             context.SaveChanges();
             return RedirectToAction("AllClients");

@@ -178,4 +178,30 @@
     </div>
 </div>
 
+<!-- Knapp för att öppna raderingsmodalen -->
+<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteProjectModal-@Model.Id">
+    Radera projekt
+</button>
+
+<!-- Modal för att bekräfta borttagning -->
+<div class="modal fade" id="deleteProjectModal-@Model.Id" tabindex="-1" aria-labelledby="deleteProjectModalLabel-@Model.Id" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteProjectModalLabel-@Model.Id">Bekräfta borttagning</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Är du säker på att du vill ta bort detta projekt? Denna åtgärd kan inte ångras.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Avbryt</button>
+                <form asp-controller="Project" asp-action="DeleteProject" method="post">
+                    <input type="hidden" name="projectId" value="@Model.Id" />
+                    <button type="submit" class="btn btn-danger">Bekräfta borttagning</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 

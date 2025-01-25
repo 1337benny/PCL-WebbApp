@@ -1,28 +1,28 @@
 ﻿@model List<Client>
 
-<h4>Skapa ett nytt projekt</h4>
-
+<h4 class="text-decoration-underline text-center">Skapa ett nytt projekt</h4>
+<div class="p-5 m-3 border">
 <form asp-action="AddProject" method="post">
-    <label style="margin-top: 15px;">Projektets namn: </label>
-    <input id="addProjectName" name="projectName" />
+    <label class="fw-bold" style="margin-top: 15px;">Projektets namn: </label>
+    <input class="w-50" id="addProjectName" name="projectName" />
     <br />
-    <label style="margin-top: 15px;">Beskrivning: </label>
+    <label class="fw-bold" style="margin-top: 15px;">Beskrivning: </label>
     
-    <textarea name="projectDescription" id="addProjectDescription" rows="4" class="form-control"></textarea>
+    <textarea name="projectDescription" id="addProjectDescription" rows="4" class="form-control w-50"></textarea>
     <br />
-    <label style="margin-top: 15px;">Startdatum: </label>
+    <label class="fw-bold" style="margin-top: 15px;">Startdatum: </label>
     <input id="addProjectStartdate" type="date" name="projectStartdate" />
     <br />
-    <label style="margin-top: 15px;">Slutdatum: </label>
+    <label class="fw-bold" style="margin-top: 15px;">Slutdatum: </label>
     <input id="addProjectEnddate" type="date" name="projectEnddate" />
     <br />
-    <label style="margin-top: 15px;">Status: </label>
+    <label class="fw-bold" style="margin-top: 15px;">Status: </label>
     <select name="projectStatus">
         <option value="true">Aktivt</option>
         <option value="false">Avslutat</option>
     </select>
     <br />
-    <label style="margin-top: 15px;">Kund: </label>
+    <label class="fw-bold" style="margin-top: 15px;">Kund: </label>
     <select name="clientID">
         @foreach(Client client in Model){
             <option value="@client.Id">@client.Name</option>
@@ -33,7 +33,7 @@
 
     <button class="btn btn-primary" style="margin-top: 15px;" id="addProjectButton" type="submit" disabled>Lägg till</button>
 </form>
-
+</div>
 
 <script>
     // Hämta alla relevanta input-element

@@ -170,10 +170,7 @@ namespace PCLwebb.Controllers
             {
                 return RedirectToAction("Index", "Home");
             }
-            //IQueryable<User> userList = from user in context.Users select user;
-            //userList = userList.Where(user => user.UserName == User.Identity.Name);
-            //User theUser = userList.FirstOrDefault();
-            //Checklist checklist = context.Checklists.FirstOrDefault(p => p.Id == checklistID && p.Creator.UserName == User.Identity.Name);
+            
             Checklist checklist = context.Checklists
                 .Include(c => c.ListTasks) 
                 .FirstOrDefault(c => c.Id == checklistID && c.Creator.UserName == User.Identity.Name);
@@ -221,7 +218,46 @@ namespace PCLwebb.Controllers
             }
         }
 
+        [HttpPost]
+        public IActionResult DeleteProject(int projectId)
+        {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home");
+            }
 
+            Project project = context.Projects.FirstOrDefault(p => p.Id == projectId && p.Creator.UserName == User.Identity.Name);
+
+            List<Project_Has_Checklist> phc = project.ProjectHasChecklists.ToList();
+
+            List<Client_Has_Project> chp = project.ClientHasProjects.ToList();
+
+            foreach (Client_Has_Project client_Has_Project in chp)
+            {
+                context.Remove(client_Has_Project);
+                
+            }
+
+
+            foreach (Project_Has_Checklist project_Has_Checklist in phc)
+            {
+                foreach (ListTask task in project_Has_Checklist.Checklist.ListTasks)
+                {
+                    context.ListTasks.Remove(task);
+                    
+                }
+
+                context.Checklists.Remove(project_Has_Checklist.Checklist);
+                context.ProjectHasChecklists.Remove(project_Has_Checklist);
+                context.SaveChanges();
+                
+            }
+
+            context.Projects.Remove(project);
+            context.SaveChanges();
+
+            return RedirectToAction("AllProjects");
+        }
 
        
 

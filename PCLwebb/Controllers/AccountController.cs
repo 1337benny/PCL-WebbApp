@@ -123,10 +123,9 @@ namespace PCLwebb.Controllers
             theUser.Firstname = user.Firstname;
             theUser.Lastname = user.Lastname;
 
-            if (user.CompanyName != null)
-            {
+            
                 theUser.CompanyName = user.CompanyName;
-            }
+            
 
             context.Users.Update(theUser);
             context.SaveChanges();

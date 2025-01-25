@@ -33,7 +33,13 @@
         </thead>
         <tbody>
             <tr>
-                <td>@Model.Creator.Firstname @Model.Creator.Lastname</td>
+                @if (Model.Creator.CompanyName == null){
+                    <td>@Model.Creator.Firstname @Model.Creator.Lastname</td>
+                }
+                else{
+                    <td>@Model.Creator.CompanyName </td>
+                }
+                
                 <td></td>
             </tr>
         </tbody>

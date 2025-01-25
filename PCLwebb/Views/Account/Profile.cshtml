@@ -1,0 +1,42 @@
+﻿@model User
+
+<h5 class="text-center">Min profil</h5>
+
+<div class="border my-5 p-3">
+	<form asp-action="UpdateUserInfo">
+		<label class="fw-bold mt-2">Förnamn</label>
+		<br />
+		<input id="firstnameInput" class="w-50" asp-for="Firstname" />
+		<br />
+		<label class="fw-bold mt-2">Efternamn</label>
+		<br />
+		<input id="lastnameInput" class="w-50" asp-for="Lastname" />
+		<br />
+		<label class="fw-bold mt-2">Företagsnamn <span class="fw-normal">(detta står istället för ditt namn vid nedladdning av pdf.)</span></label>
+		<br />
+		<input class="w-50" asp-for="CompanyName" />
+		<br />
+
+		<button id="submitButton" class="btn btn-outline-success mt-5" type="submit">Uppdatera info</button>
+	</form>
+
+</div>
+
+<script>
+	const firstname = document.getElementById("firstnameInput");
+	const lastname = document.getElementById("lastnameInput");
+	const button = document.getElementById("submitButton");
+
+	function toggleButtonState() {
+		// Kontrollera om något av fälten är tomma
+		if (firstname.value.trim() === "" || lastname.value.trim() === "") {
+			button.disabled = true;
+		} else {
+			button.disabled = false;
+		}
+	}
+
+	// Lyssna på input-händelser på båda fälten
+	firstname.addEventListener('input', toggleButtonState);
+	lastname.addEventListener('input', toggleButtonState);
+</script>

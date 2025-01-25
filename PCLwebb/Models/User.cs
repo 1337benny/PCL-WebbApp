@@ -24,6 +24,8 @@ namespace PCLwebb.Models
 
         public bool IsActive { get; set; } = true;
 
+        public string? CompanyName { get; set; }
+
         public virtual ICollection<Client> Clients { get; set; }
 
         public virtual ICollection<Checklist> Checklists { get; set; }

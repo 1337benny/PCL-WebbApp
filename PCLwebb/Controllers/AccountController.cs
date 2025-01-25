@@ -99,5 +99,38 @@ namespace PCLwebb.Controllers
             await signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
         }
+
+        [HttpGet]
+        public IActionResult Profile()
+        {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            IQueryable<User> userList = from user in context.Users select user;
+            userList = userList.Where(user => user.UserName == User.Identity.Name);
+            User theUser = userList.FirstOrDefault();
+            return View(theUser);
+        }
+
+        [HttpPost]
+        public IActionResult UpdateUserInfo(User user)
+        {
+            IQueryable<User> userList = from u in context.Users select u;
+            userList = userList.Where(user => user.UserName == User.Identity.Name);
+            User theUser = userList.FirstOrDefault();
+
+            theUser.Firstname = user.Firstname;
+            theUser.Lastname = user.Lastname;
+
+            if (user.CompanyName != null)
+            {
+                theUser.CompanyName = user.CompanyName;
+            }
+
+            context.Users.Update(theUser);
+            context.SaveChanges();
+            return RedirectToAction("Profile");
+        }
     }
 }

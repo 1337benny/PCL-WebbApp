@@ -5,11 +5,14 @@
 
 
 <form asp-action="AddChecklist" method="post">
-    <label style="margin-top: 15px;">Titel: </label>
+    <label class="fw-bold w-50" style="margin-top: 15px;">Checklistans namn: </label>
+    <br />
     <input id="addChecklistName" asp-for="Name" />
     <br />
-    <label style="margin-top: 15px;">Beskrivning: </label>
-    <input id="addChecklistDescription" asp-for="Description" />
+    <label class="fw-bold" style="margin-top: 15px;">Beskrivning: </label>
+    <br />
+    
+    <textarea class="w-50" id="addChecklistDescription" asp-for="Description"></textarea>
     <br />
 
         <button class="btn btn-primary" style="margin-top: 15px;" id="addChecklistButton" type="submit" disabled>Spara</button>

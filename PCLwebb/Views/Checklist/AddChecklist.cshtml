@@ -3,21 +3,21 @@
 
 @if (Model.Name == null){
 
-
-<form asp-action="AddChecklist" method="post">
-    <label class="fw-bold w-50" style="margin-top: 15px;">Checklistans namn: </label>
-    <br />
-    <input id="addChecklistName" asp-for="Name" />
-    <br />
-    <label class="fw-bold" style="margin-top: 15px;">Beskrivning: </label>
-    <br />
+<div class="p-5 m-3 border">
+    <form asp-action="AddChecklist" method="post">
+        <label class="fw-bold w-50" style="margin-top: 15px;">Checklistans namn: </label>
+        <br />
+        <input id="addChecklistName" asp-for="Name" />
+        <br />
+        <label class="fw-bold" style="margin-top: 15px;">Beskrivning: </label>
+        <br />
     
-    <textarea class="w-50" id="addChecklistDescription" asp-for="Description"></textarea>
-    <br />
+        <textarea class="w-50" id="addChecklistDescription" asp-for="Description"></textarea>
+        <br />
 
-        <button class="btn btn-primary" style="margin-top: 15px;" id="addChecklistButton" type="submit" disabled>Lägg till</button>
-</form>
-
+            <button class="btn btn-primary" style="margin-top: 15px;" id="addChecklistButton" type="submit" disabled>Lägg till</button>
+    </form>
+</div>
 
 <script>
     // script som kontrollerar att alla inputs är ifyllda

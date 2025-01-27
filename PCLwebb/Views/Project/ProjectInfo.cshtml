@@ -1,13 +1,15 @@
-﻿@model Project
+﻿
+@model Project
 
 
-<h5 class="text-center my-5">Projektsida</h5>
 
-<div class="border shadow p-2 my-4">
+
+<div class="border shadow p-2 my-5">
+    <h5 class=" text-center">Projektinformation</h5>
     <form asp-action="EditProjectInfo" method="post">
-        <label class="fw-bold" style="margin-top: 15px;">Kund: 
+        <label class="fw-bold mt-2">Kund: 
             @foreach(Client_Has_Project client_Has_Project in Model.ClientHasProjects){
-                <p class="fw-normal">@client_Has_Project.Client.Name</p>
+                <span class="fw-normal">@client_Has_Project.Client.Name</span>
             }
         </label>
         <br />
@@ -15,15 +17,10 @@
         <input class="w-100" id="editName" asp-for="Name" />
         <br />
         <label class="fw-bold" style="margin-top: 15px;">Beskrivning: </label>
-        @* <input id="editDescription" asp-for="Description" /> *@
-        <textarea id="editDescription" asp-for="Description" rows="4" class="form-control"></textarea>
+        
+        <textarea id="editDescription" asp-for="Description" rows="2" class="form-control"></textarea>
         <br />
-        @* <label class="fw-bold" style="margin-top: 15px;">Startdatum: </label>
-        <input type="date" id="editStartdate" asp-for="StartDate" />
-        <br />
-        <label class="fw-bold" style="margin-top: 15px;">Slutdatum: </label>
-        <input type="date" id="editEnddate" asp-for="EndDate" />
-        <br /> *@
+        
         <label class="fw-bold" style="margin-top: 15px;">Status: </label>
         
         <select asp-for="IsActive">
@@ -72,9 +69,9 @@
 </div>
 
 <div class="border shadow p-2 my-2">
-    <h4 class="text-center">Checklistor</h4>
+    <h4 class="text-center">Projektets checklistor</h4>
     @if (Model.ProjectHasChecklists.FirstOrDefault() == null){
-        <p>Du har inte lagt till någon checklista ännu.</p>
+        @* <p>Du har inte lagt till någon checklista ännu.</p> *@
     }
     else{
         <table class="table table-fixed mt-5">
@@ -144,9 +141,9 @@
 
     }
     <div class="my-3">
-    <h4 >Lägg till en checklista</h4>
+    <h4 class="mt-5" >Lägg till en checklista</h4>
     <form asp-action="AddChecklistToProject" method="post">
-            <select class="w-50" name="checklistID" id="checklistSelect">
+            <select class="w-25" name="checklistID" id="checklistSelect">
             @{
                 
                 var existingChecklistIds = Model.ProjectHasChecklists
@@ -199,7 +196,7 @@
 </div>
 
 <!-- Knapp för att öppna raderingsmodalen -->
-<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteProjectModal-@Model.Id">
+<button type="button" class="btn btn-danger mt-5" data-bs-toggle="modal" data-bs-target="#deleteProjectModal-@Model.Id">
     Radera projekt
 </button>
 

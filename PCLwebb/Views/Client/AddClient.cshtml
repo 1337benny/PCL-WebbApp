@@ -3,21 +3,21 @@
 
 
 
-
+<div class="p-5 m-3 border">
     <form asp-action="AddClient" method="post">
-        <label style="margin-top: 15px;">Kundens namn: </label>
+        <label class="fw-bold" style="margin-top: 15px;">Kundens namn: </label>
         <input id="addClientName" name="clientName" />
         <br />
-        <label style="margin-top: 15px;">Stad: </label>
+        <label class="fw-bold" style="margin-top: 15px;">Stad: </label>
         <input id="addClientCity" name="clientCity" />
         <br />
-        <label style="margin-top: 15px;">Epost: </label>
+        <label class="fw-bold" style="margin-top: 15px;">Epost: </label>
         <input id="addClientEmail" name="clientEmail" />
         <br />
         
         <button class="btn btn-primary" style="margin-top: 15px;" id="addClientButton" type="submit" disabled>Lägg till</button>
     </form>
-
+</div>
 
     <script>
         // script som kontrollerar att alla inputs är ifyllda

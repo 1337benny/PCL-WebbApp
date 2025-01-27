@@ -7,16 +7,16 @@
     <table id="customer-table" class="table table-bordered table-striped" style="width: 100%; table-layout: fixed;">
         <thead>
             <tr>
-                <th style="width: 35%; text-align: left; vertical-align: middle;">Kund</th>
+                <th style="width: 70%; text-align: left; vertical-align: middle;">Kund</th>
                 <th style="width: 30%; text-align: left; vertical-align: middle;">Stad</th>
-                <th style="width: 35%; text-align: left; vertical-align: middle;">Epost</th>
+                
             </tr>
         </thead>
         <tbody>
             <tr>
                 <td>@Model.ProjectHasChecklists.FirstOrDefault().Project.ClientHasProjects.FirstOrDefault().Client.Name</td>
                 <td>@Model.ProjectHasChecklists.FirstOrDefault().Project.ClientHasProjects.FirstOrDefault().Client.City</td>
-                <td>@Model.ProjectHasChecklists.FirstOrDefault().Project.ClientHasProjects.FirstOrDefault().Client.Email</td>
+                
             </tr>
         </tbody>
     </table>
@@ -47,11 +47,9 @@
 <div class="p-1 m-1">
     <label>Bedömningar:</label>
     <p>
-        <span class="fw-bold">(X)</span> = Klar utan anmärkning.
-        <span class="fw-bold">(1)</span> = Bör åtgärdas.
-        <span class="fw-bold">(2)</span> = Skall åtgärdas.
-        <span class="fw-bold">(Å)</span> = Åtgärdat.
-        <span class="fw-bold">(-)</span> = Ej tillämligt.
+        <span class="fw-bold">(G)</span> = Klar utan anmärkning.
+        <span class="fw-bold">(Å)</span> = Åtgärdas.
+        <span class="fw-bold">(X)</span> = Ej tillämligt.
     </p>
 </div>
 @{
@@ -64,37 +62,34 @@
     <table id="tasks-table" class="table table-bordered table-striped" style="width: 100%; table-layout: fixed;">
         <thead>
             <tr>
-                <th style="width: 5%; text-align: left; vertical-align: middle;">Bed.</th>
-                <th style="width: 25%; text-align: left; vertical-align: middle;">Uppgift</th>
+                
+                <th style="width: 20%; text-align: left; vertical-align: middle;">Uppgift</th>
                 <th style="width: 30%; text-align: left; vertical-align: middle;">Beskrivning</th>
-                <th style="width: 10%; text-align: left; vertical-align: middle;">Status</th>
+                <th style="width: 5%; text-align: left; vertical-align: middle;">Bed.</th>
+                <th style="width: 15%; text-align: left; vertical-align: middle;">Datum</th>
                 <th style="width: 30%; text-align: left; vertical-align: middle;">Notering</th>
             </tr>
         </thead>
         <tbody>
             @for (var i = 0; i < tasks.Count; i++)
             {
-                var assessment = tasks[i].Assessment ?? "-"; // Standardvärde om Assessment är null
+                var assessment = tasks[i].Assessment ?? "X"; // Standardvärde om Assessment är null
                 var isCompleted = tasks[i].IsCompleted.ToString().ToLower();
 
                 <tr>
                     <input type="hidden" name="ListTasks[@i].Id" value="@tasks[i].Id" />
-                    <td>
-                        <select name="ListTasks[@i].Assessment" class="form-control" style="width: 100%;">
-                            <option value="X" selected="@(assessment == "X")">X</option>
-                            <option value="1" selected="@(assessment == "1")">1</option>
-                            <option value="2" selected="@(assessment == "2")">2</option>
-                            <option value="Å" selected="@(assessment == "Å")">Å</option>
-                            <option value="-" selected="@(assessment == "-")">-</option>
-                        </select>
-                    </td>
+                   
                     <td style="vertical-align: middle;">@tasks[i].Name</td>
                     <td style="vertical-align: middle;">@tasks[i].Description</td>
-                    <td>
-                        <select name="ListTasks[@i].IsCompleted" class="form-control" style="width: 100%;">
-                            <option value="true" selected="@(isCompleted == "true")">Klar</option>
-                            <option value="false" selected="@(isCompleted == "false")">Ej Klar</option>
+                    <td style="vertical-align: middle;">
+                        <select name="ListTasks[@i].Assessment" class="form-control" style="width: 100%;">
+                            <option value="G" selected="@(assessment == "G")">G</option>
+                            <option value="Å" selected="@(assessment == "Å")">Å</option>
+                            <option value="X" selected="@(assessment == "X")">X</option>
                         </select>
+                    </td>
+                    <td style="vertical-align: middle;">
+                        <input name="ListTasks[@i].EditedDate" type="date" value="@tasks[i].EditedDate" />
                     </td>
                     <td>
                         <textarea name="ListTasks[@i].Note" class="form-control" style="width: 100%; resize: none;" rows="3">@tasks[i].Note</textarea>
@@ -110,34 +105,28 @@
 <table id="tasks-table-copy" class="table table-bordered table-striped" style="width: 100%; table-layout: fixed;" hidden>
     <thead>
         <tr>
-            <th style="width: 5%; text-align: left; vertical-align: middle;">Bed.</th>
             <th style="width: 25%; text-align: left; vertical-align: middle;">Uppgift</th>
             <th style="width: 30%; text-align: left; vertical-align: middle;">Beskrivning</th>
-            <th style="width: 10%; text-align: left; vertical-align: middle;">Status</th>
+            <th style="width: 5%; text-align: left; vertical-align: middle;">Bed.</th>
+            <th style="width: 10%; text-align: left; vertical-align: middle;">Datum</th>
             <th style="width: 30%; text-align: left; vertical-align: middle;">Notering</th>
         </tr>
     </thead>
     <tbody>
         @for (var i = 0; i < tasks.Count; i++)
         {
-            var assessment = tasks[i].Assessment ?? "-"; // Standardvärde om Assessment är null
+            var assessment = tasks[i].Assessment ?? "X"; // Standardvärde om Assessment är null
             var isCompleted = tasks[i].IsCompleted.ToString().ToLower();
 
             <tr>
                 
-                <td>
-                    @tasks[i].Assessment
-                </td>
+                
                 <td style="vertical-align: middle;">@tasks[i].Name</td>
                 <td style="vertical-align: middle;">@tasks[i].Description</td>
                 <td>
-                    @if (@tasks[i].IsCompleted){
-                        <span>Klar</span>
-                    }
-                    else{
-                        <span>Ej klar</span>
-                    }
+                    @tasks[i].Assessment
                 </td>
+                <td>@tasks[i].EditedDate</td>
                 <td>
                     @tasks[i].Note
                 </td>
@@ -197,7 +186,7 @@
 
         // Lägg till tredje tabellen - Uppgifter
             doc.setFontSize(10);
-            doc.text("(X) = Klar utan anmärkning. (1) = Bör åtgärdas. (2) = Skall åtgärdas. (Å) = Åtgärdat. (-) = Ej tillämpligt ", 20, currentY);
+            doc.text("(G) = Klar utan anmärkning. (X) = Ej tillämpligt. (Å) = Åtgärdas. ", 20, currentY);
         currentY += 3;
         doc.autoTable({
             html: '#tasks-table-copy',
@@ -208,7 +197,7 @@
         });
 
         // Spara PDF
-        doc.save("@Model.Name" + ".pdf");
+        doc.save("@Model.Name" + "_" + "@Model.ProjectHasChecklists.FirstOrDefault().Project.ClientHasProjects.FirstOrDefault().Client.Name" + ".pdf");
     });
 
 

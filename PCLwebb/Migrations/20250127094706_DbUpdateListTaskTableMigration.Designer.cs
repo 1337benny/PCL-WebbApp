@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PCLwebb.Models;
 
@@ -11,9 +12,11 @@ using PCLwebb.Models;
 namespace PCLwebb.Migrations
 {
     [DbContext(typeof(ModelContext))]
-    partial class ModelContextModelSnapshot : ModelSnapshot
+    [Migration("20250127094706_DbUpdateListTaskTableMigration")]
+    partial class DbUpdateListTaskTableMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -254,8 +257,8 @@ namespace PCLwebb.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateOnly?>("EditedDate")
-                        .HasColumnType("date");
+                    b.Property<DateTime?>("EditedDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<bool>("IsCompleted")
                         .HasColumnType("bit");

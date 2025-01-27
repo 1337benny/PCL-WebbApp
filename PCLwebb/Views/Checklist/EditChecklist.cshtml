@@ -61,9 +61,9 @@
 <table class="table table-fixed">
     <thead>
         <tr>
-            <th style="width: 25%;">Uppgift</th>
+            <th style="width: 30%;">Uppgift</th>
             <th style="width: 60%;">Beskrivning</th>
-            <th style="width: 15%;">Status</th>
+            @* <th style="width: 15%;">Status</th> *@
         </tr>
     </thead>
     <tbody>
@@ -71,16 +71,10 @@
         {
             <tr>
                 <td>@task.Name</td>
-                <td>@task.Description</td>
+                <td>@task.Description
+                    
+                </td>
                 <td>
-                    @if (task.IsCompleted)
-                    {
-                        <span>Klar</span>
-                    }
-                    else
-                    {
-                        <span>Ej klar</span>
-                    }
                     <form asp-controller="ListTask" asp-action="DeleteListTask" method="post">
                         <input type="hidden" name="taskID" value="@task.Id" />
                         <button class="btn btn-outline-danger mb-1" type="submit" style="float: right;">
@@ -90,6 +84,17 @@
                         </button>
                     </form>
                 </td>
+                @* <td>
+                    @if (task.iscompleted)
+                    {
+                        <span>klar</span>
+                    }
+                    else
+                    {
+                        <span>ej klar</span>
+                    }
+                    
+                </td> *@
             </tr>
         }
     </tbody>

@@ -18,14 +18,14 @@
         @* <input id="editDescription" asp-for="Description" /> *@
         <textarea id="editDescription" asp-for="Description" rows="4" class="form-control"></textarea>
         <br />
-        <label class="fw-bold" style="margin-top: 15px;">Startdatum: </label>
+        @* <label class="fw-bold" style="margin-top: 15px;">Startdatum: </label>
         <input type="date" id="editStartdate" asp-for="StartDate" />
         <br />
         <label class="fw-bold" style="margin-top: 15px;">Slutdatum: </label>
         <input type="date" id="editEnddate" asp-for="EndDate" />
-        <br />
+        <br /> *@
         <label class="fw-bold" style="margin-top: 15px;">Status: </label>
-        @* <input asp-for="IsActive" /> *@
+        
         <select asp-for="IsActive">
             <option value="true">Aktivt</option>
             <option value="false">Avslutat</option>
@@ -39,31 +39,31 @@
         // Hämta alla relevanta input-element
         const nameInput = document.getElementById("editName");
         const descriptionInput = document.getElementById("editDescription");
-        const startdateInput = document.getElementById("editStartdate");
-        const enddateInput = document.getElementById("editEnddate");
+        // const startdateInput = document.getElementById("editStartdate");
+        // const enddateInput = document.getElementById("editEnddate");
         const addButton = document.getElementById("updateProjectButton");
 
         // Funktion som validerar att alla fält är ifyllda
         function validateForm() {
             const name = nameInput.value.trim();
             const description = descriptionInput.value.trim();
-            const startdate = startdateInput.value.trim();
-            const enddate = enddateInput.value.trim();
+            // const startdate = startdateInput.value.trim();
+            // const enddate = enddateInput.value.trim();
 
             const isNameValid = name !== "";
             const isDescriptionValid = description !== "";
-            const isStartdateValid = startdate !== "";
-            const isEnddateValid = enddate !== "";
+            // const isStartdateValid = startdate !== "";
+            // const isEnddateValid = enddate !== "";
 
             // Aktivera eller inaktivera knappen baserat på valideringen
-            addButton.disabled = !(isNameValid && isDescriptionValid && isStartdateValid && isEnddateValid);
+            addButton.disabled = !(isNameValid && isDescriptionValid /* && isStartdateValid && isEnddateValid */);
         }
 
         // Lägg till event listeners för att lyssna på ändringar i varje input-fält
         nameInput.addEventListener("input", validateForm);
         descriptionInput.addEventListener("input", validateForm);
-        startdateInput.addEventListener("input", validateForm);
-        enddateInput.addEventListener("input", validateForm);
+        // startdateInput.addEventListener("input", validateForm);
+        // enddateInput.addEventListener("input", validateForm);
 
         // Kör validering en gång vid sidladdning för att säkerställa att knappen är korrekt inställd
         document.addEventListener("DOMContentLoaded", validateForm);
@@ -181,7 +181,7 @@
             const selectBox = document.getElementById("checklistSelect");
             const submitButton = document.getElementById("checklistBoxEmpty");
 
-            // Kontrollera initialt om select är tom
+            // Kontrollera direkt om select är tom
             toggleButton();
 
             // Lägg till en eventlyssnare för att kontrollera varje gång innehållet ändras

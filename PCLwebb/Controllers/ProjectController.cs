@@ -21,7 +21,7 @@ namespace PCLwebb.Controllers
                 return RedirectToAction("Index", "Home");
             }
             IQueryable<Project> projectList = from p in context.Projects select p;
-            List<Project> projects = projectList.Where(p => p.Creator.UserName == User.Identity.Name).ToList();
+            List<Project> projects = projectList.Where(p => p.Creator.UserName == User.Identity.Name).OrderByDescending(p => p.IsActive).ToList();
             return View(projects);
         }
 
@@ -34,7 +34,7 @@ namespace PCLwebb.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddProject(string projectName, string projectDescription, DateOnly projectStartdate, DateOnly projectEnddate, bool projectStatus, int clientID)
+        public IActionResult AddProject(string projectName, string projectDescription, /*DateOnly projectStartdate, DateOnly projectEnddate,*/ bool projectStatus, int clientID)
         {
             if (!User.Identity.IsAuthenticated)
             {
@@ -47,8 +47,8 @@ namespace PCLwebb.Controllers
             Project project = new Project();
             project.Name = projectName;
             project.Description = projectDescription;
-            project.StartDate = projectStartdate;
-            project.EndDate = projectEnddate;
+            //project.StartDate = projectStartdate;
+            //project.EndDate = projectEnddate;
             project.IsActive = projectStatus;
             project.CreatedBy = theUser.Id;
 
@@ -92,8 +92,8 @@ namespace PCLwebb.Controllers
 
             theProject.Name = updatedProject.Name;
             theProject.Description = updatedProject.Description;
-            theProject.StartDate = updatedProject.StartDate;
-            theProject.EndDate = updatedProject.EndDate;
+            //theProject.StartDate = updatedProject.StartDate;
+            //theProject.EndDate = updatedProject.EndDate;
             theProject.IsActive = updatedProject.IsActive;
 
             context.Projects.Update(theProject);
@@ -198,6 +198,7 @@ namespace PCLwebb.Controllers
                         existingTask.Assessment = updatedTask.Assessment;
                         existingTask.IsCompleted = updatedTask.IsCompleted;
                         existingTask.Note = updatedTask.Note;
+                        existingTask.EditedDate = updatedTask.EditedDate;
 
                         context.ListTasks.Update(existingTask);
                     }

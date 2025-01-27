@@ -12,6 +12,6 @@ namespace PCLwebb.Models
         public virtual Project Project { get; set; }
 
         [ForeignKey(nameof(ChecklistID))]
-        public virtual Checklist Checklist { get; set; }
+        public virtual Checklist? Checklist { get; set; }
     }
 }

@@ -7,7 +7,7 @@ namespace PCLwebb.Models
     {
         public ModelContext(DbContextOptions<ModelContext> options) : base(options) { }
 
-        public DbSet<User> Users { get; set; }
+        public DbSet<User> AppUsers { get; set; }
         public DbSet<Checklist> Checklists { get; set; }
         public DbSet<Client> Clients { get; set; }
         public DbSet<Project> Projects { get; set; }

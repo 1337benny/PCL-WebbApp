@@ -5,14 +5,15 @@ namespace PCLwebb.Models
     public class Project
     {
         public Project() { }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        public string Name { get; set; }
+        public string? Name { get; set; }
         public string? Description { get; set; }
         public DateOnly? StartDate { get; set; }
         public DateOnly? EndDate { get; set; }
         public bool IsActive { get; set; } = true;
 
-        public string CreatedBy { get; set; }
+        public string? CreatedBy { get; set; }
 
         [ForeignKey(nameof(CreatedBy))]
         public virtual User Creator { get; set; }

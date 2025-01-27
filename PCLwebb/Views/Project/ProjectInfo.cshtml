@@ -146,7 +146,7 @@
     <div class="my-3">
     <h4 >Lägg till en checklista</h4>
     <form asp-action="AddChecklistToProject" method="post">
-        <select class="w-50" name="checklistID">
+            <select class="w-50" name="checklistID" id="checklistSelect">
             @{
                 
                 var existingChecklistIds = Model.ProjectHasChecklists
@@ -172,10 +172,30 @@
             }
         </select>
         <input hidden name="projectId" value="@Model.Id" />
-        <button class="btn btn-primary" style="margin-top: 15px;" type="submit">Lägg till</button>
+        <button id="checklistBoxEmpty" class="btn btn-primary" style="margin-top: 15px;" type="submit" disabled>Lägg till</button>
     </form>
 
     </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const selectBox = document.getElementById("checklistSelect");
+            const submitButton = document.getElementById("checklistBoxEmpty");
+
+            // Kontrollera initialt om select är tom
+            toggleButton();
+
+            // Lägg till en eventlyssnare för att kontrollera varje gång innehållet ändras
+            selectBox.addEventListener("change", toggleButton);
+
+            function toggleButton() {
+                if (selectBox.options.length === 0 || selectBox.value === "") {
+                    submitButton.disabled = true;
+                } else {
+                    submitButton.disabled = false;
+                }
+            }
+        });
+    </script>
 </div>
 
 <!-- Knapp för att öppna raderingsmodalen -->

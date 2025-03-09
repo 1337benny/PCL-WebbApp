@@ -187,7 +187,7 @@ namespace PCLwebb.Controllers
             else
             {
                 //Skickar tillbaka vilka fält som glömts
-                return View("EditProfile", logUser);
+                return View("Profile", logUser);
             }
 
 

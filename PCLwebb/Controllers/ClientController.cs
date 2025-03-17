@@ -27,6 +27,10 @@ namespace PCLwebb.Controllers
         [HttpGet]
         public IActionResult AddClient()
         {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home");
+            }
             return View();
         }
 
@@ -57,6 +61,10 @@ namespace PCLwebb.Controllers
         [HttpGet]
         public IActionResult ClientInfo(int clientID)
         {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home");
+            }
             IQueryable<Client> clientList = from client in context.Clients select client;
             Client theClient = clientList.Where(client => client.Creator.UserName == User.Identity.Name && client.Id == clientID).FirstOrDefault();
 

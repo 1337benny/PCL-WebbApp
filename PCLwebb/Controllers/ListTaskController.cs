@@ -15,6 +15,10 @@ namespace PCLwebb.Controllers
         [HttpPost]
         public ActionResult AddListTask(string taskName, string taskDescription, int checklistId)
         {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home");
+            }
             var checklist = context.Checklists.FirstOrDefault(cl => cl.Id == checklistId);
             if (checklist == null)
             {
@@ -37,6 +41,10 @@ namespace PCLwebb.Controllers
         [HttpPost]
         public ActionResult DeleteListTask(int taskID)
         {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home");
+            }
             var theTask = context.ListTasks.FirstOrDefault(task => task.Id == taskID);
 
             context.ListTasks.Remove(theTask);

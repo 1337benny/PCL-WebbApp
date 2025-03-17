@@ -28,6 +28,10 @@ namespace PCLwebb.Controllers
         [HttpGet]
         public IActionResult AddProject()
         {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home");
+            }
             IQueryable<Client> clientList = from c in context.Clients select c;
             List<Client> clients = clientList.Where(c => c.Creator.UserName == User.Identity.Name).ToList();
             return View(clients);
@@ -71,6 +75,10 @@ namespace PCLwebb.Controllers
         [HttpGet]
         public IActionResult ProjectInfo(int projectID)
         {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home");
+            }
             IQueryable<Project> projectList = from p in context.Projects select p;
             Project project = projectList.Where(p => p.Creator.UserName == User.Identity.Name && p.Id == projectID).ToList().FirstOrDefault();
             return View(project);
@@ -92,8 +100,6 @@ namespace PCLwebb.Controllers
 
             theProject.Name = updatedProject.Name;
             theProject.Description = updatedProject.Description;
-            //theProject.StartDate = updatedProject.StartDate;
-            //theProject.EndDate = updatedProject.EndDate;
             theProject.IsActive = updatedProject.IsActive;
 
             context.Projects.Update(theProject);
@@ -180,6 +186,10 @@ namespace PCLwebb.Controllers
         [HttpPost]
         public IActionResult UpdateProjectChecklist(Checklist checklist)
         {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home");
+            }
             // Hämta den befintliga checklistan från databasen
             var existingChecklist = context.Checklists
                 .Include(c => c.ListTasks) // Ladda ListTasks

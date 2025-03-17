@@ -135,10 +135,12 @@ namespace PCLwebb.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateUserPassword(string oldPassword, string newPassword, string confirmPassword)
         {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Home");
+            }
             IQueryable<User> list = from user in context.Users where user.UserName == User.Identity.Name select user;
             User logUser = list.FirstOrDefault();
-
-            
 
             //Kollar om alla fält är ifyllda
             if (ModelState.IsValid)

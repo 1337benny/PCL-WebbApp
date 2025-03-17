@@ -26,3 +26,27 @@ body {
     transform: scale(1.1);
     color: blue;
 }
+
+.addNewWindow{
+    border: solid;
+    border-radius: 10px;
+}
+
+.addNewWindow h1{
+    text-align: center;
+    text-decoration: underline;
+}
+
+.addNewWindow label{
+    font-weight: bold;
+}
+
+.addNewWindow input{
+    width: 50%;
+    margin-bottom: 20px;
+}
+
+.addNewWindow select{
+    width: 30%;
+    margin-bottom: 20px;
+}

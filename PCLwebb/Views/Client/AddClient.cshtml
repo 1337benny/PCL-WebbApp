@@ -1,17 +1,18 @@
 ﻿
-<h4 class="text-center">Skapa ny kund</h4>
 
-
-
-<div class="p-5 m-3 border">
+<div class="p-5 m-3 border addNewWindow">
+    <h1>Skapa ny kund</h1>
     <form asp-action="AddClient" method="post">
-        <label class="fw-bold" style="margin-top: 15px;">Kundens namn: </label>
+        <label>Kundens namn: </label>
+        <br />
         <input id="addClientName" name="clientName" />
         <br />
-        <label class="fw-bold" style="margin-top: 15px;">Stad: </label>
+        <label>Stad: </label>
+        <br />
         <input id="addClientCity" name="clientCity" />
         <br />
-        <label class="fw-bold" style="margin-top: 15px;">Epost: </label>
+        <label>Epost: </label>
+        <br />
         <input id="addClientEmail" name="clientEmail" />
         <br />
         

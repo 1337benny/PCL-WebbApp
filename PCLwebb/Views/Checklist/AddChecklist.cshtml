@@ -1,9 +1,10 @@
 ﻿@model Checklist
-<h1>Skapa ny checklista</h1>
+
 
 @if (Model.Name == null){
 
-<div class="p-5 m-3 border">
+    <div class="p-5 m-3 border addNewWindow">
+    <h1>Skapa ny checklista</h1>
     <form asp-action="AddChecklist" method="post">
         <label class="fw-bold w-50" style="margin-top: 15px;">Checklistans namn: </label>
         <br />

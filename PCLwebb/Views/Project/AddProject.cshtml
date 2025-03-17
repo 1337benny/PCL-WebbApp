@@ -1,28 +1,26 @@
 ﻿@model List<Client>
 
-<h4 class="text-decoration-underline text-center">Skapa ett nytt projekt</h4>
-<div class="p-5 m-3 border">
+
+<div class="p-5 m-3 border addNewWindow">
+    <h1>Skapa ett nytt projekt</h1>
 <form asp-action="AddProject" method="post">
-    <label class="fw-bold" style="margin-top: 15px;">Projektets namn: </label>
+    <label>Projektets namn: </label>
+    <br />
     <input class="w-50" id="addProjectName" name="projectName" />
     <br />
-    <label class="fw-bold" style="margin-top: 15px;">Beskrivning: </label>
+    <label>Beskrivning: </label>
     
     <textarea name="projectDescription" id="addProjectDescription" rows="4" class="form-control w-50"></textarea>
     <br />
-    @* <label class="fw-bold" style="margin-top: 15px;">Startdatum: </label>
-    <input id="addProjectStartdate" type="date" name="projectStartdate" />
+    <label>Status: </label>
     <br />
-    <label class="fw-bold" style="margin-top: 15px;">Slutdatum: </label>
-    <input id="addProjectEnddate" type="date" name="projectEnddate" />
-    <br /> *@
-    <label class="fw-bold" style="margin-top: 15px;">Status: </label>
     <select name="projectStatus">
         <option value="true">Aktivt</option>
         <option value="false">Avslutat</option>
     </select>
     <br />
-    <label class="fw-bold" style="margin-top: 15px;">Kund: </label>
+    <label>Kund: </label>
+    <br />
     <select name="clientID">
         @foreach(Client client in Model){
             <option value="@client.Id">@client.Name</option>

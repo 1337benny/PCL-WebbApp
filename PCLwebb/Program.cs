@@ -3,13 +3,17 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<ModelContext>(options =>
-options.UseLazyLoadingProxies().UseSqlServer(builder.Configuration.GetConnectionString("ModelContext")));
+options.UseMySQL(builder.Configuration.GetConnectionString("DefaultConnection"))
+           .UseLazyLoadingProxies());
+
+/*UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));*/
 
 builder.Services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<ModelContext>().AddDefaultTokenProviders();
 

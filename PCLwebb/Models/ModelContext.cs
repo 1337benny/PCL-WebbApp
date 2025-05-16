@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+
 
 namespace PCLwebb.Models
 {
@@ -17,7 +19,19 @@ namespace PCLwebb.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
+            var dateOnlyConverter = new ValueConverter<DateOnly, DateTime>(
+                    d => d.ToDateTime(TimeOnly.MinValue),
+                    d => DateOnly.FromDateTime(d)
+                );
+
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<User>()
+            .Property(u => u.BirthDay)
+            .HasConversion(dateOnlyConverter);
+
+            modelBuilder.Entity<ListTask>().Property(t => t.EditedDate).HasConversion(dateOnlyConverter);
 
             modelBuilder.Entity<Client_Has_Project>()
         .HasKey(chp => new { chp.ProjectID, chp.ClientID });
